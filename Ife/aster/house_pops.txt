@@ -1,0 +1,15 @@
+Quincy = 468
+Leverett = 502
+Freshmen = 1664
+Currier = 355
+Cabot = 352
+Dunster = 397
+Pforzheimer = 377
+Kirkland = 354
+Adams = 450
+Lowell = 393 
+Winthrop = 401
+Mather = 404
+Eliot = 430
+
+6547
