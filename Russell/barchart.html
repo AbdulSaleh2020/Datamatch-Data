@@ -2,25 +2,21 @@
 <html>
 <head>
 <meta charset="utf-8">
+</head>
 <title>2016 Questions</title>
 <style>
 
+.axis path,
 body {
   font: 10px sans-serif;
 }
-
-.axis path,
 .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
-.white {
-  stroke: white;
-  shape-rendering: crispEdges;
-}
-
+/*This is code for the mousover thing.*/
 .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -49,6 +45,7 @@ body {
   top: 100%;
   left: 0;
 }
+/*End of code for mouseover */
 
 .bigdiv h1{
   font-size: 44px;
@@ -58,45 +55,92 @@ body {
 .bigdiv h2{
   vertical-align: center;
 }
+/*From Houses Script*/
+.housebody {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+.housetext {
+  font: 10px sans-serif;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
 
 </style>
 
 <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+<!-- Using Version 3 -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+<!-- For the mouseover thing -->
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-
 <body>
 
 
-<div class="bigdiv"> 
-<h1>Big Div</h1>
-<div id="figure" style="float:left; margin-bottom: 50px;"></div> <div style="float: right; width:20%"> <h2> Hello\n Hello again</h2>
+<!-- TITLE -->
+<div class = "bigdiv">
+<h1>2016 Survey Results</h1>
 </div>
 
 
+<!-- BAR CHART -->
+
+<div id="figure" style=" margin-left: 2%; padding: 0 15px 0 15px; border: dotted; border-color: #e6186d; float:left; margin-bottom: 50px; ">
+  
+</div> 
+
+<!-- QUESTION -->
+
+<div style="padding: 0 2% 0 2%; border-top: dotted; border-right: dotted; border-bottom: dotted; border-color: #e6186d; margin-left: 0; float: left;"> 
+  <div style = "font-size: 20px; font-weight: bold; width: 250px;">
+  <p id="questiondiv"> (#) Click on a Question to see analytics! </p>
+  </div>
+
+  <div style = "font-size: 15px;">
+<p id="answerA">(A) Answer A</p>
+<p id ="answerB">(B) Answer B</p>
+<p id="answerC">(C) Answer C</p>
+<p id="answerD">(D) Answer D</p>
+<p id="answerE">(E) Answer E</p>
+</div>
+</div>
+
+
+<div id = "chartdiv" style="margin-top: 5%; margin-left: 5%; float: left; width: 400px; height: 400px;">
+<!-- <svg2 style = "width: 400px; height: 400px;"><g2></g2></svg2> -->
+<form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
+  <label><input type="radio" name="dataset" value="apples" checked> Apples</label>
+  <label><input type="radio" name="dataset" value="oranges"> Oranges</label>
+</form>
+</div>
+
 <script>
+//For mouseover
 var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([0, 0])
   .html(function(d) {
     return "<span style='color:red'>" + d.name2 + "</span>";
   });
-
-var stylechange = 
-
+//Should make this not hardcoded, but oops.
 var margin = {top: 50, right: 25, bottom: 10, left: 125},
     width = 800 - margin.left - margin.right,
     height = 1400 - margin.top - margin.bottom;
 
+//For where the axes are, for question graph.
 var y = d3.scale.ordinal()
     .rangeRoundBands([0, height], .3);
 
 var x = d3.scale.linear()
     .rangeRound([0, width]);
 
-var color = d3.scale.ordinal()
-    .range(["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]);
-
+//Axes
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient("top");
@@ -104,39 +148,44 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-
+//Puts the chart on the page!
 var svg = d3.select("#figure").append("svg") //# references ID
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", width + margin.left + margin.right) //Location
     .attr("height", height + margin.top + margin.bottom)
     .attr("id", "d3-plot")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-
-  color.domain(["A", "B", "C", "D", "E"]);
-
-  d3.csv("raw_data.csv", function(error, data) {
-
-  // ajax d3 tutorial
-
+var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
+//Loads the data for the question responses
+d3.csv("raw_data.csv", function(error, data) {
   data.forEach(function(d) {
     // calc percentages
-    d["A"] = +d[1]*100/d.N;
+    var color = d3.scale.ordinal()
+        .range(color2);
+    color.domain(["A", "B", "C", "D", "E"]);
+    d["A"] = +d[1]*100/d.N; //N is a column in our spreadsheet with total answers
     d["B"] = +d[2]*100/d.N;
     d["C"] = +d[3]*100/d.N;
     d["D"] = +d[4]*100/d.N;
     d["E"] = +d[5]*100/d.N;
-    d["labelA"] = d.labelA;
+    d["RealQuestion"] = d.RealQuestion
+    d["Question"] = d.Question
+    d["labelA"] = d.labelA; //This is the question option
     d["labelB"] = d.labelB;
     d["labelC"] = d.labelC;
     d["labelD"] = d.labelD;
     d["labelE"] = d.labelE;
-    var x0 = 0; //-1*(d["Neither agree nor disagree"]/2+d["Disagree"]+d["Strongly disagree"]);
+    var x0 = 0; 
     var idx = 0;
     var N = 4196;
-    d.boxes = color.domain().map(function(name) { return {name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
+
+    d.boxes = color.domain().map(function(name) { return {labelA: d["labelA"],labelB:d["labelB"],labelC: d["labelC"], labelD: d["labelD"], labelE:d["labelE"],RealQuestion: d["RealQuestion"],Question:d["Question"], name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
   });
+  //Sets all the colors.  Valentine's Themed!!! 
+  var color = d3.scale.ordinal()
+      .range(["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]);
+  color.domain(["A", "B", "C", "D", "E"]);
 
   var min_val = d3.min(data, function(d) {
           return d.boxes["0"].x0;
@@ -167,25 +216,51 @@ var svg = d3.select("#figure").append("svg") //# references ID
       .data(function(d) { return d.boxes; })
     .enter().append("g").attr("class", "subbar");
 
+//Ask Raynor for Help with This'
   bars.append("rect")
       .attr("height", y.rangeBand())
       .attr("x", function(d) { return x(d.x0); })
       .attr("width", function(d) { return x(d.x1) - x(d.x0); })
       .style("fill", function(d) { return color(d.name); })
-      .on('mouseover', tip.show)
-      .on('mouseover', stylechange)
-      .on('mouseout', tip.hide);
-bars.call(tip);
+      .on('mouseover', function(d) {
+        tip.show(d);
+        d3.select(this).style("fill", "red");
+      })
+      .on('mouseout', function(d) {
+        tip.hide(d);
+        d3.select(this).style("fill", function(d) { return color(d.name); });
+      })
+      .on("click", function(d) {
+        d3.select("#questiondiv").text(d.RealQuestion);
+        d3.select("#answerA").text(d.labelA);
+        d3.select("#answerB").text(d.labelB);
+        d3.select("#answerC").text(d.labelC);
+        d3.select("#answerD").text(d.labelD);
+        d3.select("#answerE").text(d.labelE);
+        //d3.select("body").append("h1").html("My beautiful text");
+        //d3.select(".info").style("color","red");
+      });
+
+  bars.call(tip);
 
   bars.append("text")
-      .attr("x", function(d) { return x(d.x0); })
+      .attr("x", function(d) { return (x(d.x0)+x(d.x1))/2-20; })
       .attr("y", y.rangeBand()/2)
       .attr("dy", "0.5em")
       .attr("dx", "0.5em")
       .style("font" ,"10px sans-serif")
       .style("text-anchor", "begin")
       .attr("class", function(d,index) { return index==0 || index==3 ? "white" : ""; }) //Go to class white in these cases
-      .text(function(d) { return d.n !== 0 && (d.x1-d.x0)>3 ? d.n : "" });
+      .text(function(d) { return d.n !== 0 && (d.x1-d.x0)>3 ? d.n : "" })
+      .on('mouseover', function(d) {
+        tip.show(d);
+        d3.select("rect").style("fill", "red");
+      })
+      .on('mouseout', function(d) {
+        // tip.hide(d);
+        d3.select("rect").style("fill", function(d) { return color(d.name); });
+      });
+//Have Raynor help with the above
 
   vakken.insert("rect",":first-child")
       .attr("height", y.rangeBand())
@@ -239,8 +314,77 @@ bars.call(tip);
   d3.selectAll(".legendbox").attr("transform", "translate(" + movesize  + ",0)");
 
 
-});
+  // all pie chart stuff
+
+  var width = 200,
+      height = 200,
+      radius = Math.min(width, height) / 2;
+
+//HHHEEERREE
+
+
+  // var color2 = d3.scale.category20();
+
+  var pie = d3.layout.pie()
+      .value(function(d) { return d.apples; })
+      .sort(null);
+
+  var arc = d3.svg.arc()
+      .innerRadius(radius - 100)
+      .outerRadius(radius - 20);
+
+  var svg2 = d3.select("#chartdiv").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr('id', 'choice-pie')
+    .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+  console.log(svg2);
+
+  d3.tsv("data.tsv", type, function(error, data) {
+    if (error) throw error;
+
+    var path = svg2.datum(data).selectAll("path")
+        .data(pie)
+      .enter().append("path")
+        .attr("fill", function(d, i) { return color2[i]; })
+        .attr("d", arc)
+        .each(function(d) { this._current = d; }); // store the initial angles
+
+    d3.selectAll("input")
+        .on("change", change);
+
+
+    function change() {
+      var value = this.value;
+      pie.value(function(d) { return d[value]; }); // change the value function
+      path = path.data(pie); // compute the new angles
+      path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+    }
+  });
+  function type(d) {
+    d.apples = +d.apples;
+    d.oranges = +d.oranges;
+    return d;
+  }
+
+  // Store the displayed angles in _current.
+  // Then, interpolate from _current to the new angles.
+  // During the transition, _current is updated in-place by d3.interpolate.
+  function arcTween(a) {
+    var i = d3.interpolate(this._current, a);
+    this._current = i(0);
+    return function(t) {
+      return arc(i(t));
+    };
+  }
+
+  });
 </script>
+
 
 </body>
 </html>
+<!-- Ask Raynor for how to add links/ secondary page after we figured out what Sam did. -->
+
+
