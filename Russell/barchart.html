@@ -74,12 +74,20 @@ form {
 }
 
 </style>
-
 <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 <!-- Using Version 3 -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
 <!-- For the mouseover thing -->
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<!-- For Check Boxes -->
+<form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
+  <label><input type="checkbox" name="dataset" value="male" checked> Male</label>
+  <label><input type="checkbox" name="dataset" value="female" checked> Female</label>
+  <label><input type="checkbox" name="dataset" value="freshman" checked> Freshman</label>
+  <label><input type="checkbox" name="dataset" value="sophomore" checked> Sophomores</label>
+  <label><input type="checkbox" name="dataset" value="junior" checked> Juniors</label>
+  <label><input type="checkbox" name="dataset" value="senior" checked> Seniors</label>
+</form>
 <body>
 
 
@@ -87,7 +95,6 @@ form {
 <div class = "bigdiv">
 <h1>2016 Survey Results</h1>
 </div>
-
 
 <!-- BAR CHART -->
 
@@ -111,13 +118,13 @@ form {
 </div>
 </div>
 
-
+<!-- BY CHARACTERISTIC BREAKDOWN -->
 <div id = "chartdiv" style="margin-top: 5%; margin-left: 5%; float: left; width: 400px; height: 400px;">
-<!-- <svg2 style = "width: 400px; height: 400px;"><g2></g2></svg2> -->
-<form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
-  <label><input type="radio" name="dataset" value="apples" checked> Apples</label>
-  <label><input type="radio" name="dataset" value="oranges"> Oranges</label>
-</form>
+
+<!-- <form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
+  <label><input type="checkbox" name = "dataset" value = "male" > Male </label>
+  <label><input type="checkbox" name = "dataset" value = "female"  > Female </label>
+</form> -->
 </div>
 
 <script>
@@ -159,19 +166,20 @@ var svg = d3.select("#figure").append("svg") //# references ID
 var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
 //Loads the data for the question responses
 d3.csv("raw_data.csv", function(error, data) {
+  //Goes through each row and analyzes it by setting attributes like d["A"] which tell it how far accross the page that bar for that question goes and d["labelA"] which tell it what that label is.
   data.forEach(function(d) {
-    // calc percentages
     var color = d3.scale.ordinal()
         .range(color2);
     color.domain(["A", "B", "C", "D", "E"]);
-    d["A"] = +d[1]*100/d.N; //N is a column in our spreadsheet with total answers
+    //d[1] refers to what is in column labeled 1 in our csv.  N is a column in our spreadsheet with total answers
+    d["A"] = +d[1]*100/d.N; //Calculating percentages
     d["B"] = +d[2]*100/d.N;
     d["C"] = +d[3]*100/d.N;
     d["D"] = +d[4]*100/d.N;
     d["E"] = +d[5]*100/d.N;
-    d["RealQuestion"] = d.RealQuestion
-    d["Question"] = d.Question
-    d["labelA"] = d.labelA; //This is the question option
+    d["RealQuestion"] = d.RealQuestion //Full question text, for when someone clicks on it.
+    d["Question"] = d.Question //Shortened version of the question, to take up less space on very left.
+    d["labelA"] = d.labelA; //This is the question option.  The text for what you answered if you answered "A"
     d["labelB"] = d.labelB;
     d["labelC"] = d.labelC;
     d["labelD"] = d.labelD;
@@ -181,7 +189,7 @@ d3.csv("raw_data.csv", function(error, data) {
     var N = 4196;
 
     d.boxes = color.domain().map(function(name) { return {labelA: d["labelA"],labelB:d["labelB"],labelC: d["labelC"], labelD: d["labelD"], labelE:d["labelE"],RealQuestion: d["RealQuestion"],Question:d["Question"], name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
-  });
+  }); //Ends data.forEach
   //Sets all the colors.  Valentine's Themed!!! 
   var color = d3.scale.ordinal()
       .range(["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]);
@@ -216,6 +224,7 @@ d3.csv("raw_data.csv", function(error, data) {
       .data(function(d) { return d.boxes; })
     .enter().append("g").attr("class", "subbar");
 
+  var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked
 //Ask Raynor for Help with This'
   bars.append("rect")
       .attr("height", y.rangeBand())
@@ -231,14 +240,15 @@ d3.csv("raw_data.csv", function(error, data) {
         d3.select(this).style("fill", function(d) { return color(d.name); });
       })
       .on("click", function(d) {
+        change();
         d3.select("#questiondiv").text(d.RealQuestion);
         d3.select("#answerA").text(d.labelA);
         d3.select("#answerB").text(d.labelB);
         d3.select("#answerC").text(d.labelC);
         d3.select("#answerD").text(d.labelD);
         d3.select("#answerE").text(d.labelE);
-        //d3.select("body").append("h1").html("My beautiful text");
-        //d3.select(".info").style("color","red");
+        var a = d.Question.charAt(9)+ d.Question.charAt(10);
+        if (a>9) {questionnumber=a} else {questionnumber=a.charAt(0)}; 
       });
 
   bars.call(tip);
@@ -260,7 +270,7 @@ d3.csv("raw_data.csv", function(error, data) {
         // tip.hide(d);
         d3.select("rect").style("fill", function(d) { return color(d.name); });
       });
-//Have Raynor help with the above
+
 
   vakken.insert("rect",":first-child")
       .attr("height", y.rangeBand())
@@ -277,8 +287,8 @@ d3.csv("raw_data.csv", function(error, data) {
       .attr("x2", x(0))
       .attr("y2", height);
 
+//This is for the top of the bar graphs, with the key as to which color = 'A' etc.  The legend.
   var startp = svg.append("g").attr("class", "legendbox").attr("id", "mylegendbox");
-  // this is not nice, we should calculate the bounding box and use that
   var legend_tabs = [0, 80, 160, 240, 320];
   var legend = startp.selectAll(".legend")
       .data(color.domain().slice())
@@ -312,61 +322,152 @@ d3.csv("raw_data.csv", function(error, data) {
 
   var movesize = width/2 - startp.node().getBBox().width/2;
   d3.selectAll(".legendbox").attr("transform", "translate(" + movesize  + ",0)");
+//End of legend stuff.
 
+// all pie chart stuff
 
-  // all pie chart stuff
+  
 
-  var width = 200,
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var width = 200,
       height = 200,
       radius = Math.min(width, height) / 2;
 
-//HHHEEERREE
-
-
-  // var color2 = d3.scale.category20();
-
-  var pie = d3.layout.pie()
-      .value(function(d) { return d.apples; })
+  var pie = d3.layout.pie()  //This is the generator for a pie chart
+      .value(function(d) { return d.count; }) //Count is to match data in dataset2
       .sort(null);
 
   var arc = d3.svg.arc()
       .innerRadius(radius - 100)
       .outerRadius(radius - 20);
 
-  var svg2 = d3.select("#chartdiv").append("svg")
+  var svg2 = d3.select("#chartdiv")
+      .append("svg")
       .attr("width", width)
       .attr("height", height)
       .attr('id', 'choice-pie')
-    .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-  console.log(svg2);
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
 
-  d3.tsv("data.tsv", type, function(error, data) {
-    if (error) throw error;
+
+// No clue what this function does, really
+  function type(d) {
+    d.male = +d.male;  //Sets the attribute thing accessed by . to d.male, the column?
+    d.female = +d.female;  // No idea why the '+' is necessary.
+    return d;
+  }
+//Is the 'type' below related to the type function above?  Yes
+
+    //Opening Values
+    var dataset1 = [
+      { label: 'A', count: 100 },
+      { label: 'B', count: 0 },
+      { label: 'C', count: 0 },
+      { label: 'D', count: 0 },
+      { label: 'E', count: 0 }
+    ];
+    //These get modified
+    var dataset2 = [
+      { label: 'A', count: 10 },
+      { label: 'B', count: 20 },
+      { label: 'C', count: 30 },
+      { label: 'D', count: 40 },
+      { label: 'E', count: 40 }
+    ];
+    var update = [0,0,0,0,0];
+//Updated values
 
     var path = svg2.datum(data).selectAll("path")
-        .data(pie)
-      .enter().append("path")
+        .data(pie(dataset1))   //Initially it displays dataset1 stuff.  Remember pie just calculates percentages
+        .enter() 
+        .append("path")
         .attr("fill", function(d, i) { return color2[i]; })
         .attr("d", arc)
         .each(function(d) { this._current = d; }); // store the initial angles
 
-    d3.selectAll("input")
+    d3.selectAll("input") //Input is defined with the checkboxes.
         .on("change", change);
 
+      //This is the function that changes the analysis pie charts when boxes are checked.
+    var malechecked = 1;
+    var femalechecked = 1;
+    var freshmanchecked = 1;
+    var sophomorechecked = 1;
+    var juniorchecked = 1;
+    var seniorchecked = 1;
 
     function change() {
-      var value = this.value;
-      pie.value(function(d) { return d[value]; }); // change the value function
-      path = path.data(pie); // compute the new angles
+      var update = [0,0,0,0,0];
+      var value = this.value;  //this.value is either male or female deppending on button
+      //to be continued
+      if (value==='male'){malechecked = (malechecked+1)%2;}; //TO CONTINUE FOR ALL THINGS
+      if (value==='female'){femalechecked=(femalechecked+1)%2;};
+      if (value==='freshman'){freshmanchecked=(freshmanchecked+1)%2;};
+      if (value==='sophomore'){sophomorechecked=(sophomorechecked+1)%2;};
+      if (value==='junior'){juniorchecked=(juniorchecked+1)%2;};
+      if (value==='senior'){seniorchecked=(seniorchecked+1)%2;};
+      var filters = {
+        'Year': [],
+        'Gender': [],
+        'House': [],
+       };
+
+      if(malechecked==1){filters['Gender']=filters['Gender'].concat(['Male'])};
+      if(femalechecked==1){filters['Gender']=filters['Gender'].concat(['Female'])};
+      if(freshmanchecked==1){filters['Year']= filters['Year'].concat(['Freshman'])};
+      if(sophomorechecked==1){filters['Year']= filters['Year'].concat(['Sophomore'])};
+      if(juniorchecked==1){filters['Year']= filters['Year'].concat(['Junior'])};
+      if(seniorchecked==1){filters['Year']= filters['Year'].concat(['Senior'])};
+
+      console.log(filters['Year']);
+
+      d3.csv("anon_answer_data_2016.csv", function(csv) {
+        console.log('Working');
+          csv = csv.filter(function(row) {
+             // run through all the filters, returning a boolean
+             return [questionnumber].reduce(function(pass) {
+                  // console.log(filters[column]) Outputs ['Freshman','Sophomore','Junior','Senior']
+                  // console.log(row['Year']); Outputs Freshman, Sophomore, Junior, etc.
+                  // console.log(row[2]); Outputs answer to question 2
+                  // console.log('Freshman'===['Freshman','Sophomore','Junior','Senior']);
+                  // console.log(filters['Year']);
+                  // console.log(((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)));
+                  return pass && ((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)) // pass if the row's value is in an array of filter values
+                 
+                  // 
+              }, true);
+         })
+    // console.log(csv[1][questionnumber]);
+    // console.log(questionnumber);
+    // console.log(csv.length);
+    // console.log(csv[1][questionnumber]);
+    for (i=0; i<csv.length;i++) {
+      if (csv[i][questionnumber] =="A") {update[0]+=1} else if (csv[i][questionnumber]=="B"){update[1]+=1} else if (csv[i][questionnumber]=="C"){update[2]+=1} else if (csv[i][questionnumber]=="D"){update[3]+=1} else if (csv[i][questionnumber]=="E"){update[4]+=1}
+    };
+    console.log(update);
+
+    console.log(parseInt(update[0]));
+     var updatea = update[0];
+     var updateb = update[1];
+     var updatec = update[2];
+     var updated = update[3];
+     var updatee = update[4];
+
+    var dataset2 = [
+      { label: 'A', count: parseInt(update[0])},
+      { label: 'B', count: update[1] },
+      { label: 'C', count: update[2] },
+      { label: 'D', count: update[3] },
+      { label: 'E', count: update[4] }
+    ];
+
+      if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));} 
       path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
-    }
-  });
-  function type(d) {
-    d.apples = +d.apples;
-    d.oranges = +d.oranges;
-    return d;
-  }
+}); //Ends d3.csv
+    } //Ends change
 
   // Store the displayed angles in _current.
   // Then, interpolate from _current to the new angles.

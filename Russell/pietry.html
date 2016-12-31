@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<title>2016 Questions</title>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+<body>
+<div id="chart"> </div>
+
+<script> 
+var dataset2 = [
+      { label: 'A', count: 10 },
+      { label: 'B', count: 20 },
+      { label: 'C', count: 30 },
+      { label: 'D', count: 40 },
+      { label: 'E', count: 40 }
+    ];
+
+var width = 360;
+var height = 360;
+var radius = Math.min(width, height)/2;
+
+var color = d3.scale.ordinal()
+  .range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18', '#C3F25C']);
+
+var svg = d3.select('#chart')
+  .append('svg')
+  .attr('width', width)
+  .attr('height', height)
+  .append('g')
+  .attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
+
+var arc = d3.svg.arc()
+  .innerRadius(0)
+  .outerRadius(radius);
+
+var pie = d3.layout.pie()
+  .value(function(d) { return d.count; })
+  .sort(null);
+
+var path = svg.selectAll('path')
+  .data(pie(dataset2))
+  .enter()
+  .append('path')
+  .attr('d', arc)
+  .attr('fill', function(d, i) {
+    return color(d.data.label);
+  });
+
+  </script> </body></html>
