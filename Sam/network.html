@@ -22,17 +22,17 @@ fill:#555;
 <body>
 <script>
 
-var width = 960,
-    height = 500
+var width = 1960,
+    height = 1500
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 var force = d3.layout.force()
-    .gravity(.05)
+    .gravity(.2)
     .distance(100)
-    .charge(-100)
+    .charge(-10)
     .size([width, height]);
 // First use smaller data
 d3.json("jsondata.json", function(json) {
@@ -44,8 +44,8 @@ d3.json("jsondata.json", function(json) {
   var link = svg.selectAll(".link")
       .data(json.edges)
     .enter().append("line")
-      .attr("class", "edge")
-    .style("stroke-width",  0.5); //Old code example; start constant width function(d) { return Math.sqrt(d.weight); });
+      .attr("class", "link")
+    .style("stroke-width",  1); //Old code example; start constant width function(d) { return Math.sqrt(d.weight); });
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
