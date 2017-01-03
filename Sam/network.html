@@ -62,7 +62,7 @@ d3.json("jsondata.json", function(json) {
       .text(function(d) { return d.Id });
 
   force.on("tick", function() {
-    edge.attr("x1", function(d) { return d.source.x;})
+    link.attr("x1", function(d) { return d.source.x;})
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });

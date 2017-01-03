@@ -29,3 +29,7 @@ Update: better tutorial http://bl.ocks.org/sathomas/11550728
 
 
 Current bug: d3 is trying to link nodes based upon index.  My workaround to finding the index of a node was just to use its number - 1, but this isn't right because the nodes aren't strictly chronological.  I need a better parrsed file! To do this I'm going to parse the nodes first so i know their index then do the others.  
+
+
+
+New problem, some numbers are skipped - I.E 3909
