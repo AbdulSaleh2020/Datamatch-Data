@@ -37,7 +37,7 @@ for nodeIndex, line in enumerate(lines):
 for key in indexDict:
 	# Only take the first 3 matches
 	#matches = indexDict[key]['matches'][0:3]
-	matches = indexDict[key]['matches']
+	matches = indexDict[key]['matches'][0:1]
 	sourceIndex = indexDict[key]['index']
 	for match in matches:
 		#q1 is eligible

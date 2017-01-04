@@ -22,8 +22,8 @@ fill:#555;
 <body>
 <script>
 
-var width = 1960,
-    height = 1500
+var width = 960 * 2,
+    height = 500 * 2
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -31,12 +31,12 @@ var svg = d3.select("body").append("svg")
 
 var force = d3.layout.force()
     .gravity(.2)
-    .distance(100)
+    .distance(10)
     .charge(-10)
     .size([width, height]);
 // First use smaller data
-d3.json("jsondata.json", function(json) {
-  console.log(json)
+d3.json("jsondataShort.json", function(json) {
+  console.log(json);
   force
       .nodes(json.nodes)
       .links(json.edges)
@@ -45,7 +45,7 @@ d3.json("jsondata.json", function(json) {
       .data(json.edges)
     .enter().append("line")
       .attr("class", "link")
-    .style("stroke-width",  1); //Old code example; start constant width function(d) { return Math.sqrt(d.weight); });
+    .style("stroke-width",  0.5); //Old code example; start constant width function(d) { return Math.sqrt(d.weight); });
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -54,12 +54,26 @@ d3.json("jsondata.json", function(json) {
       .call(force.drag);
 
   node.append("circle")
-      .attr("r","5");
+      .attr("r","3")
+      .style('fill', function(d){ if (d.Gender == "Female") {return '#FF3368';} else if (d.Gender== "Male") {return '#0021B1';}})
 
-  node.append("text")
-      .attr("dx", 12)
+;
+
+  // no need to put text on nodes
+  /* node.append("text")
+      .attr("dx", 8)
       .attr("dy", ".35em")
-      .text(function(d) { return d.Id });
+      .text(function(d) { return d.Id }); */
+
+  // can we change tick ?
+  function tick(){
+    link.attr("x1", function(d) { return d.source.x;})
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  };
 
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x;})
