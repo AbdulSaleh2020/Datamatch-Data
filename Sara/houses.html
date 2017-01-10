@@ -99,14 +99,11 @@
             background-color: #9B1B00;
         }
 
-        .legend {
-            font-size: 30px;
-        }
 
     </style>
 
     <head>
-
+        <link rel="shortcut icon" href="static/favicon.ico">
         <link href="https://fonts.googleapis.com/css?family=Sintony:700" rel="stylesheet">
         <title>
 
@@ -250,6 +247,8 @@
                 path.on('mouseover', function(d) {
                d3.select("g").append("text")
                .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "24px")
                 .text(d.value);
             });
         
