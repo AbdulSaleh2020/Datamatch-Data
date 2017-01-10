@@ -36,14 +36,14 @@ for nodeIndex, line in enumerate(lines):
 # Once we've finished building this indexDict, loop through to build edges
 for key in indexDict:
 	# Only take the first 3 matches
-	#matches = indexDict[key]['matches'][0:3]
-	matches = indexDict[key]['matches'][0:1]
+	matches = indexDict[key]['matches'][0:3]
+	# Only take the first match
+	# matches = indexDict[key]['matches'][0:1]
 	sourceIndex = indexDict[key]['index']
 	for match in matches:
 		#q1 is eligible
 		#q2 means this person wants to match
 		#q3 means the other person wants to match
-
 		target, q1, q2, q3 = match.split(",")
 		sourceNode = key
 		targetNode = target

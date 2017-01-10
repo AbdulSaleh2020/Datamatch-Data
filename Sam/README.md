@@ -28,7 +28,8 @@ The file network.html tests this.  It uses code copied from http://bl.ocks.org/j
 Update: better tutorial http://bl.ocks.org/sathomas/11550728
 http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/
 https://medium.com/@sxywu/understanding-the-force-ef1237017d5#.ve7kaai5i
-
+http://bl.ocks.org/mbostock/1667139 (Static loading page)
+http://bl.ocks.org/norrs/2883411 (static dragging)
 Current bug: d3 is trying to link nodes based upon index.  My workaround to finding the index of a node was just to use its number - 1, but this isn't right because the nodes aren't strictly chronological.  I need a better parrsed file! To do this I'm going to parse the nodes first so i know their index then do the others.  
 
 
