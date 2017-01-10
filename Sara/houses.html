@@ -1,7 +1,10 @@
 <!DOCTYPE html>
+<!-- Specify character encoding for the HTML document -->
 <meta charset="utf-8">
+
+	<!-- CSS/style -->
     <style>
-    
+
         .button {
             display: inline-block;
             padding: .8em;
@@ -22,16 +25,58 @@
             -webkit-transition-property: color, background-color;
             transition-property: color, background-color;
         }
+
+        svg {
+            position: relative;
+            z-index:0;
+        }
         
         .hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
             background-color: #9B1B00;
             color: white;
         }
 
-        .legend {
-            font-size: 12px;
+        #chart-container {
+            height: 500px;
+            position: relative;
+            z-index: 0;
+            width: 960px; 
+            margin-bottom: 20px;
         }
-        
+
+        #button-container {
+            position: relative;
+            width: 960px; 
+
+        }
+
+        .tooltip {
+            background: #eee;
+            box-shadow: 0 0 5px #999999;
+            color: #333;
+            display: none;
+            font-size: 12px;
+            left: 240px;                             
+            padding: 10px;
+            position: absolute;
+            text-align: center;
+            top: 220px;                                             
+            width: 80px;
+            z-index: 10;                                                
+        } 
+
+        #my-wrapper {
+            position:relative; 
+            padding-top: 15px;
+        }
+
+        #title {
+            font-family: 'Sintony', sans-serif;
+            font-size: 40px;
+            text-align: center;
+            margin-top: 35px;
+        }
+
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             margin: auto;
@@ -50,16 +95,30 @@
             top: 10px;
         }
 
+        .selected {
+            background-color: #9B1B00;
+        }
+
     </style>
 
     <head>
-      <title>
-         &hearts;&hearts;&hearts;&hearts;&hearts;&hearts;
-      </title>
-    </head>
 
-    <div id="chart-container"></div>
+        <link href="https://fonts.googleapis.com/css?family=Sintony:700" rel="stylesheet">
+        <title>
+
+         House Compatibility
+
+        </title>
+
+    </head>
+    <body style="background-color: #E7E7E7;">
+    <div id="title">House Compatibility</div>
+    <div id="my-wrapper">
+
+    <div style="float:left;" id="chart-container"></div>
+
     <div id="button-container">
+    </div>
 
         <input class="filter-button button hvr-fade" type="button" name="dataset" value="Adams">
         <input class="filter-button button hvr-fade" type="button" name="dataset" value="Cabot">
@@ -76,14 +135,16 @@
         <input class="filter-button button hvr-fade" type="button" name="dataset" value="Freshmen">
         
     </div>
-
+    </body>
     <script src="https://d3js.org/d3.v4.min.js"></script>
 
     <script>
+    	
         var width = 960,
         height = 500,
         radius = Math.min(width, height) / 2;
-
+        var legendRectSize = 20;
+        var legendSpacing = 4;
 
         var enterClockwise = {
             startAngle: 0,
@@ -94,72 +155,112 @@
             startAngle: Math.PI * 2,
             endAngle: Math.PI * 2
         };
+
+
         
         var color = d3.scaleOrdinal()
-            .domain(["Adams", "Cabot", "Currier", "Dunster", "Leverett", "Eliot", "Kirkland", "Lowell", "Mather", "Pforzheimer", "Quincy", "Winthrop", "Freshmen"])
+            .domain([])
             .range(["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6", "#881133", "#AA8888", "#DF2047", "#FF99AE", "#A3465C", "#881122", "#660011", "#C5677B"]);
-        
+
         var pie = d3.pie()
             .sort(null)
-        
-        
+       
         var arc = d3.arc()
             .innerRadius(radius - 100)
-            .outerRadius(radius - 20);
+            .outerRadius(radius - 20)
+            
+
+        var tooltip = d3.select('#chart')                               
+          .append('div')                                                
+          .attr('class', 'tooltip'); 
+
+        tooltip.append('div')                                           
+          .attr('class', 'label'); 
         
-        var svg = d3.select("#chart-container").append("svg")
+        var svg = d3.select("#chart-container")
+        	.append("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")
-            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+            .attr("transform", function(d){
+            		return "translate(" + width / 2 + "," + height / 2 + ")";
+        	})
+        	
         
         d3.csv("matchmatrix.csv", type, function(error, data) {
             var path = svg.datum(data).selectAll("path")
                 .data(pie)
-                .enter().append("path")
-                    .attr("fill", function(d, i) { return color(i); })
-                    .attr("d", arc(enterClockwise))
-                    .each(function(d) { 
-                        this._current = {
-                            data: d.data,
-                            value: d.value,
-                            startAngle: enterClockwise.startAngle,
-                            endAngle: enterClockwise.endAngle
-                        };
-                    });
+                .enter()
+                .append("path")
+                .attr("fill", function(d, i) 
+                {
+                    return color(i); 
+                })
+                /*.attr("d", arc(enterClockwise))*/
+                .each(function(d) { 
+                    this._current = {
+                        data: d.data,
+                        value: d.value,
+                        startAngle: enterClockwise.startAngle,
+                        endAngle: enterClockwise.endAngle
+                    };
+                });                 
 
-                    path.on('mouseover', function(d) {
-            var total = d3.sum(dataset.map(function(d) {
-              return (d.enabled) ? d.count : 0;                       // UPDATED
-            }));
-            tooltip.select('.label').html(d.data);
-            tooltip.style('display', 'block');
-          });
-          
-          path.on('mouseout', function() {
-            tooltip.style('display', 'none');
-          });
+            
 
+            d3.selectAll("input.filter-button").on('click', function(){
+                var value = this.value;
+                pie.value(function(d) { 
+                    return d[value]; 
+                }); // change the value function
+                path = path.data(pie); // compute the new angles
+                path.transition().duration(750).attrTween("d",arcTween); // redraw the arcs
+            
+                d3.selectAll("input.filter-button").classed("selected", false)
+                d3.select(this).classed("selected", true);
+            });
 
-                    d3.selectAll("input.filter-button").on('click', change); 
-                 
-                    function change() {
-                        // clearTimeout(timeout);
-                        var value = this.value;
-                        pie.value(function(d) { 
-                            return d[value]; 
-                        }); // change the value function
-                        path = path.data(pie); // compute the new angles
-                        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
-                    }
+            var legend = svg.selectAll('.legend')
+                .data(["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Freshmen"])
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                 .attr('transform', function(d, i) {
+                    var height = legendRectSize + legendSpacing;
+                    var offset =  height * color.domain().length / 2.4;
+                    var horz = -370;
+                    var vert = i * height - offset;
+                    return 'translate(' + horz + ',' + vert + ')';
+                });
+
+            legend.append('rect')
+                .attr('width', legendRectSize)
+                .attr('height', legendRectSize)
+                .style('fill', color)
+                .style('stroke', color);
+            legend.append('text')
+                .attr('x', legendRectSize + legendSpacing)
+                .attr('y', legendRectSize - legendSpacing)
+                .text(function(d) { return d; });
+
+                path.on('mouseover', function(d) {
+               d3.select("g").append("text")
+               .attr("id", "myText")
+                .text(d.value);
+            });
+        
+            path.on('mouseout', function(d) { 
+               d3.selectAll("#myText").remove()
+                // tooltip.style('display', 'none');
+               });
+
+            path.exit()
+                .transition()
+                .duration(750)
+                .attrTween('d', arcTweenOut)
+                .remove() // now remove the exiting arcs
         });
 
-
-        path.exit()
-            .transition()
-            .duration(750)
-            .attrTween('d', arcTweenOut)
-            .remove() // now remove the exiting arcs
                
         function type(d) {
             d.Leverett = +d.Leverett;
@@ -175,7 +276,6 @@
             d.Dunster = +d.Dunster;
             d.Mather = +d.Mather;
             d.Lowell = +d.Lowell;
-
             return d;
         }
 
@@ -200,5 +300,7 @@
                 return arc(i(t));
             };
         }
+
+
 
         </script>
