@@ -110,21 +110,17 @@ form {
   </div>
 
   <div style = "font-size: 15px;">
-<p id="answerA">(A) Answer A</p>
-<p id ="answerB">(B) Answer B</p>
-<p id="answerC">(C) Answer C</p>
-<p id="answerD">(D) Answer D</p>
-<p id="answerE">(E) Answer E</p>
-</div>
+    <p id="answerA">(A) Answer A</p>
+    <p id ="answerB">(B) Answer B</p>
+    <p id="answerC">(C) Answer C</p>
+    <p id="answerD">(D) Answer D</p>
+    <p id="answerE">(E) Answer E</p>
+  </div>
 </div>
 
 <!-- BY CHARACTERISTIC BREAKDOWN -->
 <div id = "chartdiv" style="margin-top: 5%; margin-left: 5%; float: left; width: 400px; height: 400px;">
 
-<!-- <form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
-  <label><input type="checkbox" name = "dataset" value = "male" > Male </label>
-  <label><input type="checkbox" name = "dataset" value = "female"  > Female </label>
-</form> -->
 </div>
 
 <script>
@@ -162,15 +158,16 @@ var svg = d3.select("#figure").append("svg") //# references ID
     .attr("id", "d3-plot")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+// Colors for the A-E answer options.  Valentines themed!
 var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
 //Loads the data for the question responses
 d3.csv("raw_data.csv", function(error, data) {
+  //Sets all the colors.
+  var color = d3.scale.ordinal()
+    .range(color2)
+    .domain(["A", "B", "C", "D", "E"]);
   //Goes through each row and analyzes it by setting attributes like d["A"] which tell it how far accross the page that bar for that question goes and d["labelA"] which tell it what that label is.
   data.forEach(function(d) {
-    var color = d3.scale.ordinal()
-        .range(color2);
-    color.domain(["A", "B", "C", "D", "E"]);
     //d[1] refers to what is in column labeled 1 in our csv.  N is a column in our spreadsheet with total answers
     d["A"] = +d[1]*100/d.N; //Calculating percentages
     d["B"] = +d[2]*100/d.N;
@@ -187,29 +184,17 @@ d3.csv("raw_data.csv", function(error, data) {
     var x0 = 0; 
     var idx = 0;
     var N = 4196;
-
     d.boxes = color.domain().map(function(name) { return {labelA: d["labelA"],labelB:d["labelB"],labelC: d["labelC"], labelD: d["labelD"], labelE:d["labelE"],RealQuestion: d["RealQuestion"],Question:d["Question"], name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
   }); //Ends data.forEach
-  //Sets all the colors.  Valentine's Themed!!! 
-  var color = d3.scale.ordinal()
-      .range(["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]);
-  color.domain(["A", "B", "C", "D", "E"]);
 
-  var min_val = d3.min(data, function(d) {
-          return d.boxes["0"].x0;
-          });
-
-  var max_val = d3.max(data, function(d) {
-          return d.boxes["4"].x1;
-          });
-
+  var min_val = d3.min(data, function(d) {return d.boxes["0"].x0;});
+  var max_val = d3.max(data, function(d) {return d.boxes["4"].x1;});
   x.domain([min_val, max_val]);
   y.domain(data.map(function(d) { return d.Question; }));
 
   svg.append("g")
       .attr("class", "x axis")
       .call(xAxis);
-
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -221,11 +206,11 @@ d3.csv("raw_data.csv", function(error, data) {
       .attr("transform", function(d) { return "translate(0," + y(d.Question) + ")"; });
 
   var bars = vakken.selectAll("rect")
-      .data(function(d) { return d.boxes; })
+    .data(function(d) { return d.boxes; })
     .enter().append("g").attr("class", "subbar");
 
-  var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked
-//Ask Raynor for Help with This'
+  var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked.  By default show the first question.  
+
   bars.append("rect")
       .attr("height", y.rangeBand())
       .attr("x", function(d) { return x(d.x0); })
@@ -325,14 +310,11 @@ d3.csv("raw_data.csv", function(error, data) {
 //End of legend stuff.
 
 // all pie chart stuff
-
-  
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var width = 200,
+  var width = 200,
       height = 200,
       radius = Math.min(width, height) / 2;
 
@@ -399,6 +381,7 @@ var width = 200,
     var juniorchecked = 1;
     var seniorchecked = 1;
 
+    //On change the function has to calculate new values for things in the pie chart.  It does this by seeing what the checkboxes want then sorting all data according to that.  
     function change() {
       var update = [0,0,0,0,0];
       var value = this.value;  //this.value is either male or female deppending on button
@@ -414,7 +397,7 @@ var width = 200,
         'Gender': [],
         'House': [],
        };
-
+       //Add our criteria to the filters
       if(malechecked==1){filters['Gender']=filters['Gender'].concat(['Male'])};
       if(femalechecked==1){filters['Gender']=filters['Gender'].concat(['Female'])};
       if(freshmanchecked==1){filters['Year']= filters['Year'].concat(['Freshman'])};
@@ -422,51 +405,32 @@ var width = 200,
       if(juniorchecked==1){filters['Year']= filters['Year'].concat(['Junior'])};
       if(seniorchecked==1){filters['Year']= filters['Year'].concat(['Senior'])};
 
-      console.log(filters['Year']);
-
+      //Open up csv with all raw data, and filter it.  
       d3.csv("anon_answer_data_2016.csv", function(csv) {
-        console.log('Working');
           csv = csv.filter(function(row) {
-             // run through all the filters, returning a boolean
+             // run through all the filters, returning a the row if it passes the filters.
              return [questionnumber].reduce(function(pass) {
-                  // console.log(filters[column]) Outputs ['Freshman','Sophomore','Junior','Senior']
-                  // console.log(row['Year']); Outputs Freshman, Sophomore, Junior, etc.
-                  // console.log(row[2]); Outputs answer to question 2
-                  // console.log('Freshman'===['Freshman','Sophomore','Junior','Senior']);
-                  // console.log(filters['Year']);
-                  // console.log(((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)));
                   return pass && ((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)) // pass if the row's value is in an array of filter values
-                 
-                  // 
               }, true);
          })
-    // console.log(csv[1][questionnumber]);
-    // console.log(questionnumber);
-    // console.log(csv.length);
-    // console.log(csv[1][questionnumber]);
-    for (i=0; i<csv.length;i++) {
-      if (csv[i][questionnumber] =="A") {update[0]+=1} else if (csv[i][questionnumber]=="B"){update[1]+=1} else if (csv[i][questionnumber]=="C"){update[2]+=1} else if (csv[i][questionnumber]=="D"){update[3]+=1} else if (csv[i][questionnumber]=="E"){update[4]+=1}
-    };
-    console.log(update);
 
-    console.log(parseInt(update[0]));
-     var updatea = update[0];
-     var updateb = update[1];
-     var updatec = update[2];
-     var updated = update[3];
-     var updatee = update[4];
-
-    var dataset2 = [
-      { label: 'A', count: parseInt(update[0])},
-      { label: 'B', count: update[1] },
-      { label: 'C', count: update[2] },
-      { label: 'D', count: update[3] },
-      { label: 'E', count: update[4] }
-    ];
-
-      if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));} 
-      path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
-}); //Ends d3.csv
+        //Go through remaining rows and tally up question responses.
+        for (i=0; i<csv.length;i++) {
+           if (csv[i][questionnumber] =="A") {update[0]+=1} else if (csv[i][questionnumber]=="B"){update[1]+=1} else if (csv[i][questionnumber]=="C"){update[2]+=1} else if (csv[i][questionnumber]=="D"){update[3]+=1} else if (csv[i][questionnumber]=="E"){update[4]+=1}
+        };
+        //This is the dataset that we custom populate based on update
+        var dataset2 = [
+           { label: 'A', count: update[0] },
+           { label: 'B', count: update[1] },
+           { label: 'C', count: update[2] },
+           { label: 'D', count: update[3] },
+           { label: 'E', count: update[4] }
+        ];
+        //The if statement handles the case that there is no data, in which case it uses dataset 1 which is blank.
+       if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));} 
+        //This initiates the smooth transitions.
+        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+      }); //Ends d3.csv
     } //Ends change
 
   // Store the displayed angles in _current.
@@ -480,7 +444,7 @@ var width = 200,
     };
   }
 
-  });
+});
 </script>
 
 
