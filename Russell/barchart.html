@@ -2,92 +2,15 @@
 <html>
 <head>
 <meta charset="utf-8">
-</head>
 <title>2016 Questions</title>
-<style>
-
-.axis path,
-body {
-  font: 10px sans-serif;
-}
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-/*This is code for the mousover thing.*/
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 1);
-  color: #fff;
-  border-radius: 4px;
-}
-
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 1);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-}
-
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
-}
-/*End of code for mouseover */
-
-.bigdiv h1{
-  font-size: 44px;
-  text-align: center;
-}
-
-.bigdiv h2{
-  vertical-align: center;
-}
-/*From Houses Script*/
-.housebody {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
-
-.housetext {
-  font: 10px sans-serif;
-}
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
+</head>
 <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 <!-- Using Version 3 -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
 <!-- For the mouseover thing -->
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <!-- For Check Boxes -->
-<form style="margin-top: 45%; margin-left: 5%; float: left; width: 400px; height:400px;">
-  <label><input type="checkbox" name="dataset" value="male" checked> Male</label>
-  <label><input type="checkbox" name="dataset" value="female" checked> Female</label>
-  <label><input type="checkbox" name="dataset" value="freshman" checked> Freshman</label>
-  <label><input type="checkbox" name="dataset" value="sophomore" checked> Sophomores</label>
-  <label><input type="checkbox" name="dataset" value="junior" checked> Juniors</label>
-  <label><input type="checkbox" name="dataset" value="senior" checked> Seniors</label>
-</form>
 <body>
 
 
@@ -97,15 +20,15 @@ form {
 </div>
 
 <!-- BAR CHART -->
-
+<div id="center_all">
 <div id="figure" style=" margin-left: 2%; padding: 0 15px 0 15px; border: dotted; border-color: #e6186d; float:left; margin-bottom: 50px; ">
   
 </div> 
 
 <!-- QUESTION -->
 
-<div style="padding: 0 2% 0 2%; border-top: dotted; border-right: dotted; border-bottom: dotted; border-color: #e6186d; margin-left: 0; float: left;"> 
-  <div style = "font-size: 20px; font-weight: bold; width: 250px;">
+<div style="padding: 0 2% 0 2%; border-top: dotted; border-right: dotted; border-bottom: dotted; border-color: #e6186d; margin-left: 0; float: left;width:350px"> 
+  <div style = "font-size: 20px; font-weight: bold;">
   <p id="questiondiv"> (#) Click on a Question to see analytics! </p>
   </div>
 
@@ -119,11 +42,149 @@ form {
 </div>
 
 <!-- BY CHARACTERISTIC BREAKDOWN -->
-<div id = "chartdiv" style="margin-top: 5%; margin-left: 5%; float: left; width: 400px; height: 400px;">
-
+<div id="chart_holder" style="padding: 0 2% 0 2%; margin-top: 0%; margin-left: 0%;float:left; width: 350px; height: 400px; border-right: dotted;border-bottom:dotted; border-color:#e6186d;">
+	<h1>Filter Responses By Year &amp Gender</h1>
+	<div id = "chartdiv"><div><center><img src="label.png" alt="" / width = 180px height=45px></div></center></div>
+	<center>
+     <div id="buttons1">
+      <button id="button11" class="filter-button button hvr-fade" onClick="change1('freshman',1)">Freshman</button>
+      <button id="button21" class="filter-button button hvr-fade" onClick="change1('sophomore',2)">Sophomore</button>
+      <button id="button31" class="filter-button button hvr-fade" onClick="change1('junior',3)">Junior</button>
+      <button id="button41" class="filter-button button hvr-fade" onClick="change1('senior',4)">Senior</button>
+    </div>
+    </center>
+    <center>
+    <div id="buttons2">
+      <button id="button51" class="filter-button button hvr-fade" onClick="change1('male',5)">Male</button>
+      <button id="button61" class="filter-button button hvr-fade" onClick="change1('female',6)">Female</button>
+    </div>
+    </center>
 </div>
-
+</div><!--Ends centering div--> 
 <script>
+var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
+
+var width = 350,
+      height = 200,
+      radius = Math.min(width, height) / 2;
+
+var pie = d3.layout.pie()  //This is the generator for a pie chart
+      .value(function(d) { return d.count; }) //Count is to match data in dataset2
+      .sort(null);
+
+var arc = d3.svg.arc()
+      .innerRadius(radius - 100)
+      .outerRadius(radius - 20);
+
+var svg2 = d3.select("#chartdiv")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr('id', 'choice-pie')
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+
+    //Opening Values
+var dataset1 = [
+      { label: 'A', count: 100 },
+      { label: 'B', count: 0 },
+      { label: 'C', count: 0 },
+      { label: 'D', count: 0 },
+      { label: 'E', count: 0 }
+    ];
+    //These get modified
+var dataset2 = [
+      { label: 'A', count: 10 },
+      { label: 'B', count: 20 },
+      { label: 'C', count: 30 },
+      { label: 'D', count: 40 },
+      { label: 'E', count: 40 }
+    ];
+var update = [0,0,0,0,0];
+//Updated values
+
+    var path = svg2.selectAll("path") 
+        .data(pie(dataset1))   //Initially it displays dataset1 stuff.  Remember pie just calculates percentages
+        .enter() 
+        .append("path")
+        .attr("fill", function(d, i) { return color2[i]; })
+        .attr("d", arc)
+        .each(function(d) { this._current = d; }); // store the initial angles
+	var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked.  By default show the first question. 
+    var malechecked1 = 1;
+    var femalechecked1 = 1;
+    var freshmanchecked1 = 1;
+    var sophomorechecked1 = 0;
+    var juniorchecked1 = 0;
+    var seniorchecked1 = 0;
+
+    var property = document.getElementById('button11');
+    if(freshmanchecked1==1){property.style.backgroundColor = "#9B1B00"} else if(freshmanchecked1==0){property.style.backgroundColor = "#B7B7B7"};
+    var property = document.getElementById('button21');
+    if(sophomorechecked1==1){property.style.backgroundColor = "#9B1B00"} else if(sophomorechecked1==0){property.style.backgroundColor = "#B7B7B7"};
+    var property = document.getElementById('button31');
+    if(juniorchecked1==1){property.style.backgroundColor = "#9B1B00"} else if(juniorchecked1==0){property.style.backgroundColor = "#B7B7B7"};
+    var property = document.getElementById('button41');
+    if(seniorchecked1==1){property.style.backgroundColor = "#9B1B00"} else if(seniorchecked1==0){property.style.backgroundColor = "#B7B7B7"};
+    var property = document.getElementById('button51');
+    if(malechecked1==1){property.style.backgroundColor = "#9B1B00"} else if(malechecked1==0){property.style.backgroundColor = "#B7B7B7"};
+    var property = document.getElementById('button61');
+    if(femalechecked1==1){property.style.backgroundColor = "#9B1B00"} else if(femalechecked1==0){property.style.backgroundColor = "#B7B7B7"};
+
+function change1(choice,button_number) {
+      var update = [0,0,0,0,0];
+      if(choice=="none"){} else if(choice=="freshman"){freshmanchecked1= (freshmanchecked1+1)%2 } else if(choice=="sophomore"){sophomorechecked1=(sophomorechecked1+1)%2} else if(choice=="junior"){juniorchecked1=(juniorchecked1+1)%2} else if(choice=="senior"){seniorchecked1=(seniorchecked1+1)%2} else if(choice=="male"){malechecked1=(malechecked1+1)%2} else if(choice=="female"){femalechecked1=(femalechecked1+1)%2};
+      if(choice=="none"){} else {
+      var property = document.getElementById('button'+button_number.toString()+'1');
+      if(freshmanchecked1==1){property.style.backgroundColor = "#9B1B00"} else if(freshmanchecked1==0){property.style.backgroundColor = "#B7B7B7"};
+      if(sophomorechecked1==1 && button_number==2){property.style.backgroundColor = "#9B1B00"} else if(sophomorechecked1==0 && button_number==2){property.style.backgroundColor = "#B7B7B7"};
+      if(juniorchecked1==1 && button_number==3){property.style.backgroundColor = "#9B1B00"} else if(juniorchecked1==0 && button_number==3){property.style.backgroundColor = "#B7B7B7"};
+      if(seniorchecked1==1 && button_number==4){property.style.backgroundColor = "#9B1B00"} else if(seniorchecked1==0 && button_number==4){property.style.backgroundColor = "#B7B7B7"};
+      if(malechecked1==1 && button_number==5){property.style.backgroundColor = "#9B1B00"} else if(malechecked1==0 && button_number==5){property.style.backgroundColor = "#B7B7B7"};
+      if(femalechecked1==1 && button_number==6){property.style.backgroundColor = "#9B1B00"} else if(femalechecked1==0 && button_number==6){property.style.backgroundColor = "#B7B7B7"};
+  }
+      var filters = {
+        'Year': [],
+        'Gender': [],
+        'House': [],
+       };
+       //Add our criteria to the filters
+      if(malechecked1==1){filters['Gender']=filters['Gender'].concat(['Male'])};
+      if(femalechecked1==1){filters['Gender']=filters['Gender'].concat(['Female'])};
+      if(freshmanchecked1==1){filters['Year']= filters['Year'].concat(['Freshman'])};
+      if(sophomorechecked1==1){filters['Year']= filters['Year'].concat(['Sophomore'])};
+      if(juniorchecked1==1){filters['Year']= filters['Year'].concat(['Junior'])};
+      if(seniorchecked1==1){filters['Year']= filters['Year'].concat(['Senior'])};
+
+      //Open up csv with all raw data, and filter it.  
+      d3.csv("anon_answer_data_2016.csv", function(csv) {
+          csv = csv.filter(function(row) {
+             // run through all the filters, returning a the row if it passes the filters.
+             return [questionnumber].reduce(function(pass) {
+                  return pass && ((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)) // pass if the row's value is in an array of filter values
+              }, true);
+         })
+
+        //Go through remaining rows and tally up question responses.
+        for (i=0; i<csv.length;i++) {
+           if (csv[i][questionnumber] =="A") {update[0]+=1} else if (csv[i][questionnumber]=="B"){update[1]+=1} else if (csv[i][questionnumber]=="C"){update[2]+=1} else if (csv[i][questionnumber]=="D"){update[3]+=1} else if (csv[i][questionnumber]=="E"){update[4]+=1}
+        };
+        //This is the dataset that we custom populate based on update
+        var dataset2 = [
+           { label: 'A', count: update[0] },
+           { label: 'B', count: update[1] },
+           { label: 'C', count: update[2] },
+           { label: 'D', count: update[3] },
+           { label: 'E', count: update[4] }
+        ];
+        //The if statement handles the case that there is no data, in which case it uses dataset 1 which is blank.
+       if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));} 
+        //This initiates the smooth transitions.
+        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+      }); //Ends d3.csv
+    } //Ends change
+
+
 //For mouseover
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -158,8 +219,7 @@ var svg = d3.select("#figure").append("svg") //# references ID
     .attr("id", "d3-plot")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-// Colors for the A-E answer options.  Valentines themed!
-var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
+
 //Loads the data for the question responses
 d3.csv("raw_data.csv", function(error, data) {
   //Sets all the colors.
@@ -209,7 +269,7 @@ d3.csv("raw_data.csv", function(error, data) {
     .data(function(d) { return d.boxes; })
     .enter().append("g").attr("class", "subbar");
 
-  var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked.  By default show the first question.  
+  
 
   bars.append("rect")
       .attr("height", y.rangeBand())
@@ -225,7 +285,7 @@ d3.csv("raw_data.csv", function(error, data) {
         d3.select(this).style("fill", function(d) { return color(d.name); });
       })
       .on("click", function(d) {
-        change();
+        change1("none",0);
         d3.select("#questiondiv").text(d.RealQuestion);
         d3.select("#answerA").text(d.labelA);
         d3.select("#answerB").text(d.labelB);
@@ -307,6 +367,8 @@ d3.csv("raw_data.csv", function(error, data) {
 
   var movesize = width/2 - startp.node().getBBox().width/2;
   d3.selectAll(".legendbox").attr("transform", "translate(" + movesize  + ",0)");
+
+});
 //End of legend stuff.
 
 // all pie chart stuff
@@ -314,124 +376,15 @@ d3.csv("raw_data.csv", function(error, data) {
 
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  var width = 200,
-      height = 200,
-      radius = Math.min(width, height) / 2;
+  
 
-  var pie = d3.layout.pie()  //This is the generator for a pie chart
-      .value(function(d) { return d.count; }) //Count is to match data in dataset2
-      .sort(null);
-
-  var arc = d3.svg.arc()
-      .innerRadius(radius - 100)
-      .outerRadius(radius - 20);
-
-  var svg2 = d3.select("#chartdiv")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr('id', 'choice-pie')
-      .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-
-
-// No clue what this function does, really
-  function type(d) {
-    d.male = +d.male;  //Sets the attribute thing accessed by . to d.male, the column?
-    d.female = +d.female;  // No idea why the '+' is necessary.
-    return d;
-  }
-//Is the 'type' below related to the type function above?  Yes
-
-    //Opening Values
-    var dataset1 = [
-      { label: 'A', count: 100 },
-      { label: 'B', count: 0 },
-      { label: 'C', count: 0 },
-      { label: 'D', count: 0 },
-      { label: 'E', count: 0 }
-    ];
-    //These get modified
-    var dataset2 = [
-      { label: 'A', count: 10 },
-      { label: 'B', count: 20 },
-      { label: 'C', count: 30 },
-      { label: 'D', count: 40 },
-      { label: 'E', count: 40 }
-    ];
-    var update = [0,0,0,0,0];
-//Updated values
-
-    var path = svg2.datum(data).selectAll("path")
-        .data(pie(dataset1))   //Initially it displays dataset1 stuff.  Remember pie just calculates percentages
-        .enter() 
-        .append("path")
-        .attr("fill", function(d, i) { return color2[i]; })
-        .attr("d", arc)
-        .each(function(d) { this._current = d; }); // store the initial angles
-
-    d3.selectAll("input") //Input is defined with the checkboxes.
-        .on("change", change);
+    // d3.selectAll("input") //Input is defined with the checkboxes.
+    //     .on("change", change);
 
       //This is the function that changes the analysis pie charts when boxes are checked.
-    var malechecked = 1;
-    var femalechecked = 1;
-    var freshmanchecked = 1;
-    var sophomorechecked = 1;
-    var juniorchecked = 1;
-    var seniorchecked = 1;
 
     //On change the function has to calculate new values for things in the pie chart.  It does this by seeing what the checkboxes want then sorting all data according to that.  
-    function change() {
-      var update = [0,0,0,0,0];
-      var value = this.value;  //this.value is either male or female deppending on button
-      //to be continued
-      if (value==='male'){malechecked = (malechecked+1)%2;}; //TO CONTINUE FOR ALL THINGS
-      if (value==='female'){femalechecked=(femalechecked+1)%2;};
-      if (value==='freshman'){freshmanchecked=(freshmanchecked+1)%2;};
-      if (value==='sophomore'){sophomorechecked=(sophomorechecked+1)%2;};
-      if (value==='junior'){juniorchecked=(juniorchecked+1)%2;};
-      if (value==='senior'){seniorchecked=(seniorchecked+1)%2;};
-      var filters = {
-        'Year': [],
-        'Gender': [],
-        'House': [],
-       };
-       //Add our criteria to the filters
-      if(malechecked==1){filters['Gender']=filters['Gender'].concat(['Male'])};
-      if(femalechecked==1){filters['Gender']=filters['Gender'].concat(['Female'])};
-      if(freshmanchecked==1){filters['Year']= filters['Year'].concat(['Freshman'])};
-      if(sophomorechecked==1){filters['Year']= filters['Year'].concat(['Sophomore'])};
-      if(juniorchecked==1){filters['Year']= filters['Year'].concat(['Junior'])};
-      if(seniorchecked==1){filters['Year']= filters['Year'].concat(['Senior'])};
-
-      //Open up csv with all raw data, and filter it.  
-      d3.csv("anon_answer_data_2016.csv", function(csv) {
-          csv = csv.filter(function(row) {
-             // run through all the filters, returning a the row if it passes the filters.
-             return [questionnumber].reduce(function(pass) {
-                  return pass && ((filters['Gender'].indexOf(row['Gender']) >= 0) && (filters['Year'].indexOf(row['Year'])>=0)) // pass if the row's value is in an array of filter values
-              }, true);
-         })
-
-        //Go through remaining rows and tally up question responses.
-        for (i=0; i<csv.length;i++) {
-           if (csv[i][questionnumber] =="A") {update[0]+=1} else if (csv[i][questionnumber]=="B"){update[1]+=1} else if (csv[i][questionnumber]=="C"){update[2]+=1} else if (csv[i][questionnumber]=="D"){update[3]+=1} else if (csv[i][questionnumber]=="E"){update[4]+=1}
-        };
-        //This is the dataset that we custom populate based on update
-        var dataset2 = [
-           { label: 'A', count: update[0] },
-           { label: 'B', count: update[1] },
-           { label: 'C', count: update[2] },
-           { label: 'D', count: update[3] },
-           { label: 'E', count: update[4] }
-        ];
-        //The if statement handles the case that there is no data, in which case it uses dataset 1 which is blank.
-       if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));} 
-        //This initiates the smooth transitions.
-        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
-      }); //Ends d3.csv
-    } //Ends change
+    
 
   // Store the displayed angles in _current.
   // Then, interpolate from _current to the new angles.
@@ -444,7 +397,7 @@ d3.csv("raw_data.csv", function(error, data) {
     };
   }
 
-});
+
 </script>
 
 
