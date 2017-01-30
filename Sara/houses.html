@@ -244,12 +244,14 @@
                 .attr('y', legendRectSize - legendSpacing)
                 .text(function(d) { return d; });
 
-                path.on('mouseover', function(d) {
+            array = ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Freshmen"]
+
+            path.on('mouseover', function(d) {
                d3.select("g").append("text")
                .attr("id", "myText")
                .attr("text-anchor", "middle")
                .style("font-size", "24px")
-                .text(d.value);
+                .text(array[d.index].toString() +" (" + String(d.value) + ")");
             });
         
             path.on('mouseout', function(d) { 
