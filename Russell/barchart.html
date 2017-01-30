@@ -11,18 +11,18 @@
 <!-- For the mouseover thing -->
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <!-- For Check Boxes -->
-<body>
+<body style= "background-color: #E7E7E7;">
 
 
 <!-- TITLE -->
+<div style="margin-left: auto; margin-right: auto; width: 1400px;">
 <div class = "bigdiv">
 <h1>2016 Survey Results</h1>
 <center><h2>Check out questions from last year to see how people answered them.  You can select different demographics of the Harvard population by selecting various gender and year combination in the bottom-right box.  Freshmen males and freshmen females are initially selected.  </h2></center>
 </div>
-
 <!-- BAR CHART -->
 <div id="figure" style=" margin-left: 2%; padding: 0 15px 0 15px; border: dotted; border-color: #e6186d; float:left; margin-bottom: 50px; ">
-	<center><div>
+	<center><div style="margin-top:3%; margin-bottom:3%;">
       <button id="page1" class="filter-button button hvr-fade" onClick="sheet_shift(1)">Page 1</button>
       <button id="page2" class="filter-button button hvr-fade" onClick="sheet_shift(2)">Page 2</button>
       <button id="page3" class="filter-button button hvr-fade" onClick="sheet_shift(3)">Page 3</button>
@@ -31,24 +31,24 @@
 
 <!-- QUESTION -->
 
-<div style="padding: 0 2% 0 2%; border-top: dotted; border-right: dotted; border-bottom: dotted; border-color: #e6186d; margin-left: 0; float: left;width:400px;height:330px"> 
+<div style="padding: 0 2% 0 2%; border-top: dotted; border-right: dotted; border-bottom: dotted; border-color: #e6186d; margin-left: 0; float: left;width:30%;height:330px"> 
   <div style = "font-size: 20px; font-weight: bold;">
-  	<p id="questiondiv"> (#) Click on a Question to see analytics! </p>
+  	<p id="questiondiv"> <div id="questiondiv2" style="margin-top:130px; text-align: center; font-size: 30px;"> Click on a question to see analytics! </div></p>
   </div>
 
   <div style = "font-size: 15px;">
-    <p id="answerA">(A) Answer A</p>
-    <p id ="answerB">(B) Answer B</p>
-    <p id="answerC">(C) Answer C</p>
-    <p id="answerD">(D) Answer D</p>
-    <p id="answerE">(E) Answer E</p>
+    <p id="answerA"></p>
+    <p id ="answerB"></p>
+    <p id="answerC"></p>
+    <p id="answerD"></p>
+    <p id="answerE"></p>
   </div>
 </div>
 
 <!-- BY CHARACTERISTIC BREAKDOWN -->
-<div id="chart_holder" style="padding: 0 2% 0 2%; margin-top: 0%; margin-left: 0%;float:left; width: 400px; height: 390px; border-right: dotted;border-bottom:dotted; border-color:#e6186d;">
+<div id="chart_holder" style="padding: 1% 2% 0 2%;float:left; width: 30%; height: 420px; border-right: dotted;border-bottom:dotted; border-color:#e6186d;">
 	<center><h1>Filter Responses By Year &amp Gender</h1>
-	<div id = "chartdiv"><div><img src="label.png" alt="" / width = 180px height=45px></div></div>
+	<div id = "chartdiv"><div><img src="label.png" alt="" / width = 180px height=50px></div></div>
 
 	<center>
      <div id="buttons1">
@@ -66,6 +66,7 @@
     </center>
 </div>
 </div><!--Ends centering div--> 
+</div>
 <script>
 sheet_number=1
 var color2=["#A80022", "#D8ADB6", "#F27991", "#992233", "#FFCCD6"]
@@ -116,7 +117,7 @@ var update = [0,0,0,0,0];
         .attr("fill", function(d, i) { return color2[i]; })
         .attr("d", arc)
         .each(function(d) { this._current = d; }); // store the initial angles
-	var questionnumber= 1; //This will be helpful for the pie chart to keep track of which one was clicked.  By default show the first question. 
+	  var questionnumber= 0; //This will be helpful for the pie chart to keep track of which one was clicked.  By default show the first question. 
     var malechecked1 = 1;
     var femalechecked1 = 1;
     var freshmanchecked1 = 1;
@@ -198,6 +199,14 @@ var tip = d3.tip()
   .html(function(d) {
     return "<span style='color:red'>" + d.name2 + "</span>";
   });
+
+  var tip2 = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-18, 6])
+  .html(function(d) {
+    return "<span style='color:red'>" + d.name2 + "</span>";
+  });
+
 //Should make this not hardcoded, but oops.
 var margin = {top: 50, right: 25, bottom: 10, left: 125},
     width = 800 - margin.left - margin.right,
@@ -307,6 +316,7 @@ d3.csv(sheet_string, function(error, data) {
       })
       .on("click", function(d) {
         change1("none",0);
+        d3.select("#questiondiv2").remove();
         d3.select("#questiondiv").text(d.RealQuestion);
         d3.select("#answerA").text(d.labelA);
         d3.select("#answerB").text(d.labelB);
@@ -318,6 +328,7 @@ d3.csv(sheet_string, function(error, data) {
       });
 
   bars.call(tip);
+  bars.call(tip2);
 
   bars.append("text")
       .attr("x", function(d) { return (x(d.x0)+x(d.x1))/2-20; })
@@ -326,14 +337,15 @@ d3.csv(sheet_string, function(error, data) {
       .attr("dx", "0.5em")
       .style("font" ,"10px sans-serif")
       .style("text-anchor", "begin")
-      .attr("class", function(d,index) { return index==0 || index==3 ? "white" : ""; }) //Go to class white in these cases
+      .style("fill", function(d,index) { return index==0 || index==3 ? "white" : "black"; }) //Go to class white in these cases
       .text(function(d) { return d.n !== 0 && (d.x1-d.x0)>3 ? d.n : "" })
       .on('mouseover', function(d) {
-        tip.show(d);
-        d3.select("rect").style("fill", "red");
+        tip2.show(d);
+        console.log(d3.select(this.previousElementSibling));
+        d3.select(this.previousElementSibling).style("fill", "red");
       })
       .on('mouseout', function(d) {
-        // tip.hide(d);
+        tip2.hide(d);
         d3.select("rect").style("fill", function(d) { return color(d.name); });
       });
 

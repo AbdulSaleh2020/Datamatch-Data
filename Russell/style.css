@@ -45,6 +45,7 @@ body {
 }
 
 .bigdiv h2{
+  width: 870px;
   vertical-align: center;
 }
 /*From Houses Script*/
@@ -92,11 +93,15 @@ form {
   color: white;
 }
 
-.bar {
+.bar2 {
   fill: steelblue;
 }
 
 .bar:hover {
+  fill: brown;
+}
+
+.bar2:hover {
   fill: brown;
 }
 
