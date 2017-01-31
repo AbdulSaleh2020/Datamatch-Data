@@ -1,0 +1,4 @@
+NOTES: 
+
+1. Fix python code so that it prints out output
+2. Make it so that it only gets the entries that have the desired ID 

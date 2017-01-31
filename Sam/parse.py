@@ -56,7 +56,10 @@ for key in indexDict:
 				# Get the target's key
 				if target in indexDict.keys():
 					targetIndex = indexDict[target]['index']
-					connection_dict = {'source':int(sourceIndex), 'target':int(targetIndex), 'eligible':q1, 'interested':q2, 'reverse interest':q3}
+					# Source ndoe and target node 
+					# Changing this so that it's by source node and target node..
+					# To change back: sourceIndex and targetIndex 
+					connection_dict = {'source':int(sourceNode), 'target':int(targetNode), 'eligible':q1, 'interested':q2, 'reverse interest':q3}
 					edges.append(connection_dict)
 myOutput = {'nodes':nodes, 'edges':edges}
 print(json.dumps(myOutput))

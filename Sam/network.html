@@ -37,22 +37,49 @@ var svg = d3.select('body').append('svg')
   var force = d3.layout.force()
     .size([w,h])
     .charge(-10)
-    
-d3.json('jsondataShort.json', function(json) {
+
+
+var SELECTED_NODE_ID = 8; 
+
+
+d3.json('jsondatabyID.json', function(json) {
   
+  // FILTERING THE EDGES BY THE SELECTED_NODE_ID
+  var node_id_set = new Set();
+  var edges = [];
+    json.edges.filter(function(n) {return (n.source == SELECTED_NODE_ID || n.target == SELECTED_NODE_ID)})
+    .forEach(function(e) { 
+
+    var sourceNode = json.nodes.filter(function(n) {return n.Id == e.source})[0],
+    targetNode = json.nodes.filter(function(n) {return n.Id == e.target; })[0];
+    if (targetNode && sourceNode)
+    {
+      node_id_set.add(sourceNode.Id);
+      node_id_set.add(targetNode.Id);
+    }
+    edges.push({'source': sourceNode, 'target': targetNode, 'value': e.Value});
+    });
+    
+    console.log(edges);
+  //FILTERING THE NODES TO GET ONLY THE ONES THAT WE NEED 
+  var jsonNodes = json.nodes.filter(function(n) {
+    return node_id_set.has(n.Id);
+  });
+  console.log(jsonNodes);
+
   force
     .on('start', start)
-    .nodes(json.nodes)
-    .links(json.edges)
+    .nodes(jsonNodes) //previously json.nodes
+    .links(edges) // previously json.edges
     .start();
   
   var links = svg.selectAll('.link')
-    .data(json.edges)
+    .data(edges) // previously json.edges
     .enter().append('line')
       .attr('class', 'link');
   
   var nodes = svg.selectAll('.node')
-    .data(json.nodes)
+    .data(jsonNodes) // previously json.nodes 
     .enter().append("g")
       .attr('class', 'node')
 
