@@ -27,8 +27,8 @@ text {
 <script>
 
 
-var w = 960 * 2,
-    h = 500 * 2;
+var w = 960, //* 2,
+    h = 500; // *2 ;
 
 var svg = d3.select('body').append('svg')
   .attr('width', w)
@@ -36,7 +36,8 @@ var svg = d3.select('body').append('svg')
 
   var force = d3.layout.force()
     .size([w,h])
-    .charge(-10)
+    .charge(-150)
+    .distance(100)
 
 
 var SELECTED_NODE_ID = 8; 
@@ -68,7 +69,7 @@ d3.json('jsondatabyID.json', function(json) {
   console.log(jsonNodes);
 
   force
-    .on('start', start)
+    //.on('start', start)
     .nodes(jsonNodes) //previously json.nodes
     .links(edges) // previously json.edges
     .start();
@@ -84,33 +85,44 @@ d3.json('jsondatabyID.json', function(json) {
       .attr('class', 'node')
 
   nodes.append("circle")
-      .attr("r","5")
+      .attr("r","9")
       .style('fill', function(d){ if (d.Gender == "Female") {return '#FF3368';} else if (d.Gender== "Male") {return '#0021B1';}})
       .call(force.drag)
 
+  force.on("tick", function() {
+    links.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
 
-  function start() {
-    var ticksPerRender = 3;
-    requestAnimationFrame(function render() {
-      for (var i = 0; i < ticksPerRender; i++) {
-        force.tick();
-      }
-      links
-        .attr('x1', function(d) { return d.source.x; })
-        .attr('y1', function(d) { return d.source.y; })
-        .attr('x2', function(d) { return d.target.x; })
-        .attr('y2', function(d) { return d.target.y; });
-      // nodes
-      //   .attr('cx', function(d) { return d.x; })
-      //   .attr('cy', function(d) { return d.y; });
+    nodes.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+
+
+
+  // Used when trying to load a super big network 
+  // function start() {
+  //   var ticksPerRender = 3;
+  //   requestAnimationFrame(function render() {
+  //     for (var i = 0; i < ticksPerRender; i++) {
+  //       force.tick();
+  //     }
+  //     links
+  //       .attr('x1', function(d) { return d.source.x; })
+  //       .attr('y1', function(d) { return d.source.y; })
+  //       .attr('x2', function(d) { return d.target.x; })
+  //       .attr('y2', function(d) { return d.target.y; });
+  //     // nodes
+  //     //   .attr('cx', function(d) { return d.x; })
+  //     //   .attr('cy', function(d) { return d.y; });
       
-          nodes.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  //         nodes.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-      if (force.alpha() > 0.05) {
-        requestAnimationFrame(render);
-      }
-    })
-  }
+  //     if (force.alpha() > 0.05) {
+  //       requestAnimationFrame(render);
+  //     }
+  //   })
+  // }
 });
 
 
