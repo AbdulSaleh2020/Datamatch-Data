@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+  crossorigin="anonymous"></script>
 <style>
 
 .link {
@@ -23,7 +27,9 @@ text {
 
 </style>
 <body>
-</body>
+  Id Number:<br>
+
+  <input type="number" name="username" id="input"><br>
 <script>
 
 
@@ -39,12 +45,17 @@ var svg = d3.select('body').append('svg')
     .charge(-150)
     .distance(100)
 
+$("#input").change(function(){
+  var id_input = $("#input").val();
+  resetPage(id_input);
+});
 
-var SELECTED_NODE_ID = 8; 
-
+function resetPage(id){
+  $("svg").empty();
 
 d3.json('jsondatabyID.json', function(json) {
-  
+  var SELECTED_NODE_ID = id; 
+
   // FILTERING THE EDGES BY THE SELECTED_NODE_ID
   var node_id_set = new Set();
   var edges = [];
@@ -124,6 +135,7 @@ d3.json('jsondatabyID.json', function(json) {
   //   })
   // }
 });
+}
 
 
 </script>
