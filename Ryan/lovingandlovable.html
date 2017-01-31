@@ -20,13 +20,19 @@ body {
 
 .tooltip {
   position: absolute;
-  width: 200px;
+  width: 220px;
   height: 28px;
   pointer-events: none;
 }
 </style>
 <body>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<form style="margin-top: 45%; margin-left: 5%; float: left; width: 420px; height:00px;">
+</form>
+<input type="checkbox" id="HouseCheck"> House
+<input type="checkbox" id="GenderCheck"> Gender
+<input type="checkbox" id="YearCheck"> Year
 
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -39,6 +45,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
  * map function - maps from data value to display value
  * axis - sets up axis
  */ 
+update();
 
 // setup x 
 var xValue = function(d) { return d["Likes Given"];}, // data -> value
@@ -53,7 +60,7 @@ var yValue = function(d) { return d["Likes Received"];}, // data -> value
     yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 // setup fill color
-var cValue = function(d) { return d["House"];},
+var cValue = function(d) { return d["Color"];},
     color = d3.scale.category10();
 
 // add the graph canvas to the body of the webpage
@@ -62,24 +69,82 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  //   houseCheckBox = new d3CheckBox(),
-  //   genderCheckBox = new d3CheckBox(),
-  //   yearCheckBox = new d3CheckBox();
 
 // add the tooltip area to the webpage
 var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+d3.select("#HouseCheck").on("change",update);
+d3.select("#GenderCheck").on("change",update);
+d3.select("#YearCheck").on("change",update);
+
+
+function update(){
 // load data
 d3.csv("matchcomposition.csv", function(error, data) {
+  //newData = data.filter(function(d,i){return d % 2 == 0;});
+  //newData = data;
+  newData = [];
 
   // change string (from CSV) into number format
   data.forEach(function(d) {
-    d["Participation"] = +d["Participation"];
-    d["Likes Given"] = +d["Likes Given"];
-    d["Likes Received"] = +d["Likes Received"];
+    if (d.Delimiter == d["House"]){
+      d["Participation"] = +d["Participation"];
+      d["Likes Given"] = +d["Likes Given"];
+      d["Likes Received"] = +d["Likes Received"];
+    }
   });
+
+  var sorted = {};
+  for (var i = 0; i < data.length; i++) {
+    var description = "";
+    var colortype = "";
+    if(d3.select("#GenderCheck").property("checked")){
+      description = description + data[i]["Gender"] + " ";
+     colortype = data[i]["Gender"];
+    }
+    if(d3.select("#YearCheck").property("checked")){
+      description = description + data[i]["Year"] + " ";
+      colortype = data[i]["Year"];
+    }
+    if(d3.select("#HouseCheck").property("checked")){
+      description = description + data[i]["House"] + " ";
+      colortype = data[i]["House"];
+    }
+
+    if (description in sorted){
+      sorted[description]["Likes Given"] += parseInt(data[i]["Likes Given"]);
+      sorted[description]["Likes Received"] += parseInt(data[i]["Likes Received"]);
+    } 
+    else {
+      var temp = {};
+      temp["Likes Given"] = parseInt(data[i]["Likes Given"]); 
+      temp["Likes Received"] = parseInt(data[i]["Likes Received"]); 
+      temp["Color"] = colortype;
+      sorted[description] = temp;
+    }
+  }
+  
+  console.log(sorted);
+
+  for (var key in sorted){
+    var temp = {"Description" : key};
+    newData.push(
+      extend(temp, sorted[key])
+    );
+  }
+
+  function extend(obj, src) {
+    Object.keys(src).forEach(function(key) { obj[key] = src[key]; });
+    return obj;
+  }
+
+  console.log(newData[0]);
+  svg.selectAll("*").remove();
+
+  // if(d3.select("#HouseCheck").property("checked")){
+  // }
 
   // don't want dots overlapping axis, so add in buffer to data domain
   xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
@@ -109,25 +174,10 @@ d3.csv("matchcomposition.csv", function(error, data) {
       .style("text-anchor", "end")
       .text("Lovable");
 
-  // svg.append("text").attr("x", 10).attr("y", 80).text("Click checkboxes"),
-  //   update = function () {
-  //     var houseCheckBox = houseCheckBox.checked(),
-  //         genderCheckBox = genderCheckBox.checked(),
-  //         yearCheckBox = yearCheckBox.checked();
-  //         //txt.text(checked1 + ", " + checked2 + ", " + checked3);
-  //   }; 
-
-  // houseCheckBox.x(120).y(30).checked(true).clickEvent(update);
-  // genderCheckBox.x(120).y(40).checked(true).clickEvent(update);
-  // yearCheckBox.x(120).y(50).checked(true).clickEvent(update);
-
-  // svg.call(houseCheckBox);
-  // svg.call(genderCheckBox);
-  // svg.call(yearCheckBox);   
-
   // draw dots
+
   svg.selectAll(".dot")
-      .data(data)
+      .data(newData)
     .enter().append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
@@ -138,7 +188,7 @@ d3.csv("matchcomposition.csv", function(error, data) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["House"] + ", " + d["Gender"] + ", " + d["Year"] + "<br/> (" + xValue(d) 
+          tooltip.html(d["Description"] + "<br/> (" + xValue(d) 
 	        + ", " + yValue(d) + ")")
                .style("left", (d3.event.pageX + 5) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
@@ -149,31 +199,36 @@ d3.csv("matchcomposition.csv", function(error, data) {
                .style("opacity", 0);
       });
 
-
-
   // draw legend
+
   var legend = svg.selectAll(".legend")
       .data(color.domain())
     .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
-      .attr("x", width - 18)
+      .attr("x", width + 10)
       .attr("width", 18)
       .attr("height", 18)
       .style("fill", color);
 
   // draw legend text
   legend.append("text")
-      .attr("x", width - 24)
+      .attr("x", width )
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
       .text(function(d) { return d;})
 });
 
+}
+
 </script>
 </body>
 </html>
+
+
+
+

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>2016 Questions</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="static/style.css">
 </head>
 <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 <!-- Using Version 3 -->
@@ -48,7 +48,7 @@
 <!-- BY CHARACTERISTIC BREAKDOWN -->
 <div id="chart_holder" style="padding: 1% 2% 0 2%;float:left; width: 30%; height: 420px; border-right: dotted;border-bottom:dotted; border-color:#e6186d;">
 	<center><h1>Filter Responses By Year &amp Gender</h1>
-	<div id = "chartdiv"><div><img src="label.png" alt="" / width = 180px height=50px></div></div>
+	<div id = "chartdiv"><div><img src="static/label.png" alt="" / width = 180px height=50px></div></div>
 
 	<center>
      <div id="buttons1">
@@ -167,7 +167,7 @@ function change1(choice,button_number) {
       if(freshmanchecked1==0 && sophomorechecked1==0 && juniorchecked1==0 &&seniorchecked1==0){filters['Year']=filters['Year'].concat(['Freshman']).concat(['Sophomore']).concat(['Junior']).concat(['Senior'])};
 
       //Open up csv with all raw data, and filter it.  
-      d3.csv("anon_answer_data_2016.csv", function(csv) {
+      d3.csv("csv/anon_answer_data_2016.csv", function(csv) {
           csv = csv.filter(function(row) {
              // run through all the filters, returning a the row if it passes the filters.
              return [questionnumber].reduce(function(pass) {
@@ -252,7 +252,7 @@ function sheet_shift(n){
 	var property = document.getElementById('page'+sheet_number.toString());
 	property.style.backgroundColor = "#9B1B00"
 
-sheet_string="raw_data"+sheet_number.toString()+".csv"
+sheet_string="csv/raw_data"+sheet_number.toString()+".csv"
 d3.csv(sheet_string, function(error, data) {
   //Sets all the colors.
   var color = d3.scale.ordinal()
