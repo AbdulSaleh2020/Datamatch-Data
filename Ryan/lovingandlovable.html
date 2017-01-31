@@ -234,13 +234,14 @@ d3.csv("matchcomposition.csv", function(error, data) {
       .call(yAxis);
 
   svg.selectAll(".legend").remove();
+  //d3.select('#legend').selectAll('ul').remove();
 
   // draw legend
   var legend = svg.selectAll(".legend")
-      .data(color.domain())
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
+    .data(color.domain())
+  .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
@@ -255,7 +256,7 @@ d3.csv("matchcomposition.csv", function(error, data) {
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
-      .text(function(d) { return d;})
+      .text(function(d) { return d;});
 });
 
 }
