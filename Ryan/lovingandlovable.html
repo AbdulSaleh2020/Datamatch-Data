@@ -183,8 +183,8 @@ d3.csv("matchcomposition.csv", function(error, data) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["Description"] + "<br/> (" + xValue(d) 
-	        + ", " + yValue(d) + ")")
+          tooltip.html(d["Description"] + "<br/> Loving: " + xValue(d) 
+	        + "<br/> Lovable: " + yValue(d))
                .style("left", (d3.event.pageX + 5) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
