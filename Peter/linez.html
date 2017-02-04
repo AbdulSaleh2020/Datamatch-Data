@@ -83,7 +83,9 @@ path {
     </div>
 
 <!-- load the d3.js library -->    
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+
 
 <script>
 // Set the dimensions of the canvas / graph
@@ -127,7 +129,7 @@ var filters = {
        };
 
 
-d3.json('the.json', function(json) {
+d3.json('sample.json', function(json) {
     users_array = json.users
     number_of_users = users_array.length
     json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
@@ -136,13 +138,15 @@ d3.json('the.json', function(json) {
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
+        console.log(d.date)
         d.date = parseTime(d.date)
         d.response = total_people
         total_people +=1
+        console.log(d.date);
     })
 
     console.log(total_people);
-    })
+
 
     // x.domain(d3.extent(data, function(d) { return d.time; }));
     // y.domain([0, d3.max(data, function(d) { return d.response; })]);
@@ -206,8 +210,8 @@ d3.json('the.json', function(json) {
     //             d.active = active;
     //             })  
     //         .text(d.key); 
-// })
-
+    //     })
+    })
 
 
 // Get the data
