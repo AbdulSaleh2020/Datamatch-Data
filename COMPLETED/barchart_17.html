@@ -182,18 +182,18 @@ function change1(choice,button_number) {
             update[(parseInt(answers[questionnumber-1]) -1 )%5]+=1
           })
             //This is the dataset that we custom populate based on update
-          var dataset2 = [
-           { label: 'A', count: update[0] },
-           { label: 'B', count: update[1] },
-           { label: 'C', count: update[2] },
-           { label: 'D', count: update[3] },
-           { label: 'E', count: update[4] }
-          ];
-        //Makes sure that update is nonzero.
-        if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));};
+        //   var dataset2 = [
+        //    { label: 'A', count: update[0] },
+        //    { label: 'B', count: update[1] },
+        //    { label: 'C', count: update[2] },
+        //    { label: 'D', count: update[3] },
+        //    { label: 'E', count: update[4] }
+        //   ];
+        // //Makes sure that update is nonzero.
+        // if(update[0] + update[1] + update[2]+ update[3]+update[4] == 0) {path = path.data(pie(dataset1));} else {path = path.data(pie(dataset2));};
 
-        //This initiates the smooth transitions.
-        path.transition().duration(750).attrTween("d", arcTween);// redraw the arcs
+        // //This initiates the smooth transitions.
+        // path.transition().duration(750).attrTween("d", arcTween);// redraw the arcs
           })
       }
 //For mouseover
