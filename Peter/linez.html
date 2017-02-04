@@ -127,17 +127,18 @@ var filters = {
        };
 
 
-d3.json('sample.json', function(json) {
+d3.json('the.json', function(json) {
     users_array = json.users
     number_of_users = users_array.length
     json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
         && (filters['Year'].indexOf(n.class_year)>=0) 
-        && (filters['House'].indexOf(n.dorm)>=0))})
-    //Create a variable for number of people signed up already
-    .forEach(function(e) {
-        e.date = parseTime(e.date)
-        e.total = total_people
-        total_people +=1;
+        && (filters['House'].indexOf(n.dorm)>=0))
+        })
+    // Create a variable for number of people signed up already
+    .forEach(function(d) {
+        d.date = parseTime(d.date)
+        d.response = total_people
+        total_people +=1
     })
 
     console.log(total_people);
@@ -287,7 +288,6 @@ d3.json('sample.json', function(json) {
 //     svg.append("g")
 //         .attr("class", "y axis")
 //         .call(yAxis);
-});
 
 
 </script>

@@ -174,14 +174,15 @@ function change1(choice,button_number) {
       if(freshmanchecked1==0 && sophomorechecked1==0 && juniorchecked1==0 &&seniorchecked1==0){filters['Year']=filters['Year'].concat(['Freshman']).concat(['Sophomore']).concat(['Junior']).concat(['Senior'])};
 
       d3.json('the.json', function(json) {
-          users_array = json.users
-          number_of_users = users_array.length
-          json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) && (filters['Year'].indexOf(n.class_year)>=0) )})
-          .forEach(function(e) { 
-            answers = e.answers
-            update[(parseInt(answers[questionnumber-1]) -1 )%5]+=1
-          })
-            //This is the dataset that we custom populate based on update
+        console.log("worked");
+        //   users_array = json.users
+        //   number_of_users = users_array.length
+        //   json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) && (filters['Year'].indexOf(n.class_year)>=0) )})
+        //   .forEach(function(e) { 
+        //     answers = e.answers
+        //     update[(parseInt(answers[questionnumber-1]) -1 )%5]+=1
+        //   })
+        //     //This is the dataset that we custom populate based on update
         //   var dataset2 = [
         //    { label: 'A', count: update[0] },
         //    { label: 'B', count: update[1] },
