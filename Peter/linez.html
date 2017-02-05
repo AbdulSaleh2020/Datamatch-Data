@@ -85,7 +85,7 @@ path {
 <!-- load the d3.js library -->    
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
-
+<link rel=https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js>
 
 <script>
 // Set the dimensions of the canvas / graph
@@ -108,7 +108,8 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) { return x(d.time); })
+    .x(function(d) { console.log(x(d.date));
+        return x(d.time); })
     .y(function(d) { return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
@@ -138,79 +139,79 @@ d3.json('sample.json', function(json) {
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
-        console.log(d.date)
-        d.date = parseTime(d.date)
+        d.date = (Date.parse(d.date)-1329582512000)/(1329600512000-1329582512000);
+        console.log((d.date - 1329582512000)/(1329600512000-1329582512000));
         d.response = total_people
         total_people +=1
-        console.log(d.date);
     })
 
     console.log(total_people);
 
 
-    // x.domain(d3.extent(data, function(d) { return d.time; }));
-    // y.domain([0, d3.max(data, function(d) { return d.response; })]);
+    x.domain(d3.extent(users_array, function(d) { return d.date; }));
+    y.domain([0, d3.max(users_array, function(d) { return d.response; })]);
 
-    //     // Nest the entries by symbol
-    // var dataNest = d3.nest()
-    //     .key(function(d) {return d.house;})
-    //     .entries(data);
-    // var color = d3.scale.category10();   // set the colour scale
+        // Nest the entries by symbol
+    var dataNest = d3.nest()
+        .key(function(d) {return d.dorm;})
+        .entries(users_array);
+    var color = d3.scale.category10();   // set the colour scale
     
-    // legendSpace = width/dataNest.length; // spacing for the legend
+    legendSpace = width/dataNest.length; // spacing for the legend
     
-    // // Loop through each house 
-    // dataNest.forEach(function(d,i) { 
-    //     svg.append("path")
-    //         .attr("class", "line")
-    //         .style("stroke", function() { // Add the colours dynamically
-    //             return d.color = color(d.key); })
-    //         .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
-    //         .attr("d", responseline(d.values));
+    // Loop through each house 
+    dataNest.forEach(function(d,i) { 
+        console.log(d.values);
+        svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
+            .attr("d", responseline(d.values));
         
-    //     svg.append("rect")
-    //         .attr("width", 60)
-    //         .attr("height", 40)
-    //         .attr("fill", "#B7B7B7")
-    //         .attr("x", (legendSpace/2)+i*legendSpace - 30)
-    //         .attr("y", height + (margin.bottom/2) - 20)
-    //         .on("click", function(){
-    //             // Determine if current line is visible 
-    //             var active   = d.active ? false : true,
-    //             newOpacity = active ? 0 : 1; 
+        svg.append("rect")
+            .attr("width", 60)
+            .attr("height", 40)
+            .attr("fill", "#B7B7B7")
+            .attr("x", (legendSpace/2)+i*legendSpace - 30)
+            .attr("y", height + (margin.bottom/2) - 20)
+            .on("click", function(){
+                // Determine if current line is visible 
+                var active   = d.active ? false : true,
+                newOpacity = active ? 0 : 1; 
 
-    //             // Hide or show the elements based on the ID
-    //             d3.select("#tag"+d.key.replace(/\s+/g, ''))
-    //                 .transition().duration(100) 
-    //                 .style("opacity", newOpacity); 
-    //             // Update whether or not the elements are active
-    //             d.active = active;
+                // Hide or show the elements based on the ID
+                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                    .transition().duration(100) 
+                    .style("opacity", newOpacity); 
+                // Update whether or not the elements are active
+                d.active = active;
 
-    //             d3.select(this)
-    //                 .transition().duration(100)
-    //                 .attr("fill", function() { return d.color = color(d.key); })
-    //             });
+                d3.select(this)
+                    .transition().duration(100)
+                    .attr("fill", function() { return d.color = color(d.key); })
+                });
 
-    //     svg.append("text")
-    //         .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-    //         .attr("y", height + (margin.bottom/2)+ 5)
-    //         .attr("class", "legend")    // style the legend
-    //         .style("fill", function() { // Add the colours dynamically
-    //             return d.color = color(d.key); })
-    //         .on("click", function(){
-    //             // Determine if current line is visible 
-    //             var active   = d.active ? false : true,
-    //             newOpacity = active ? 0 : 1; 
+        svg.append("text")
+            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+            .attr("y", height + (margin.bottom/2)+ 5)
+            .attr("class", "legend")    // style the legend
+            .style("fill", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .on("click", function(){
+                // Determine if current line is visible 
+                var active   = d.active ? false : true,
+                newOpacity = active ? 0 : 1; 
 
-    //             // Hide or show the elements based on the ID
-    //             d3.select("#tag"+d.key.replace(/\s+/g, ''))
-    //                 .transition().duration(100) 
-    //                 .style("opacity", newOpacity); 
-    //             // Update whether or not the elements are active
-    //             d.active = active;
-    //             })  
-    //         .text(d.key); 
-    //     })
+                // Hide or show the elements based on the ID
+                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                    .transition().duration(100) 
+                    .style("opacity", newOpacity); 
+                // Update whether or not the elements are active
+                d.active = active;
+                })  
+            .text(d.key); 
+        })
     })
 
 
@@ -283,15 +284,15 @@ d3.json('sample.json', function(json) {
 //                 })  
 //             .text(d.key); 
 //     });
-//     // Add the X Axis
-//     svg.append("g")
-//         .attr("class", "x axis")
-//         .attr("transform", "translate(0," + height + ")")
-//         .call(xAxis);
-//     // Add the Y Axis
-//     svg.append("g")
-//         .attr("class", "y axis")
-//         .call(yAxis);
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
 
 </script>
