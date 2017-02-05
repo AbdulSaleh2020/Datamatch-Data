@@ -86,7 +86,7 @@ var yAxis = d3.svg.axis().scale(y)
 console.log(x(0.5));
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) { console.log(d.time); return x(d.time); })
+    .x(function(d) { console.log(x(d.time)); return x(d.time); })
     .y(function(d) { return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
@@ -104,6 +104,7 @@ var svg = d3.select("body")
 d3.csv("data.csv", function(error, data) {
     data.forEach(function(d) {
         d.time = parseTime(d.time);
+        console.log(d.time);
         d.response = +d.response;
     });
     // Scale the range of the data

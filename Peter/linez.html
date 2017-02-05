@@ -142,8 +142,10 @@ d3.json('sample.json', function(json) {
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
+        console.log("mark");
         console.log(Date.parse(d.date));
-        d.date = new Date(Date.parse(d.date));
+        var stuff = new Date(Date.parse(d.date));
+        console.log(stuff);
         console.log(d.date);
         d.response = total_people
         total_people +=1
