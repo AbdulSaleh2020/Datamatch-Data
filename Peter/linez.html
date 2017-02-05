@@ -140,7 +140,7 @@ d3.json('sample.json', function(json) {
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
-        console.log(parseTime(Date.parse(d.date)));
+        console.log(Date.parse(d.date));
         d.date = new Date(Date.parse(d.date));
         console.log(d.date);
         d.response = total_people
@@ -151,7 +151,7 @@ d3.json('sample.json', function(json) {
     console.log(total_people);
 
 
-    x.domain(d3.extent(users_array, function(d) { console.log(d.date); console.log("SARA"); return d.date; }));
+    x.domain(d3.extent(users_array, function(d) { console.log(d.date); return d.date; }));
     y.domain([0, d3.max(users_array, function(d) { return d.response; })]);
 
         // Nest the entries by symbol
