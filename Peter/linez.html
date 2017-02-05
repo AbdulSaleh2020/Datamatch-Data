@@ -101,7 +101,9 @@ var parseTime2 = d3.time.format("%Y-%m-%dT%H:%M:%S%Z");
 var x = d3.time.scale()
         .nice(d3.time.day)
         .range([0, width]);
-var y = d3.scale.linear().range([height, 0]);
+var y = d3.scale.linear()
+    .domain([0, 10])
+    .range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
@@ -129,7 +131,7 @@ var total_people = 1;
 var filters = {
         'Year': ['Freshman', 'Sophomore', 'Junior', 'Senior'],
         'Gender': ['Male','Female'],
-        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer", "Canaday", "Mower", "Holworthy", "Hollis", "Greenough", "Weld", "Matthews", "Grays", "Lionel", "Mass Hall", "Hurlbut", "Wigglesworth"],
+        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer", "Canaday", "Mower", "Holworthy", "Hollis", "Greenough", "Weld", "Matthews", "Grays", "Lionel", "Mass Hall", "Hurlbut", "Wigglesworth", "Stoughton", "Apley"],
        };
 
 
