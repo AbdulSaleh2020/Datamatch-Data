@@ -129,46 +129,43 @@ var total_people = 1;
 var filters = {
         'Year': ['Freshman', 'Sophomore', 'Junior', 'Senior'],
         'Gender': ['Male','Female'],
-        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer"],
+        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer", "Canaday", "Mower", "Holworthy", "Hollis", "Greenough", "Weld", "Matthews", "Grays", "Lionel", "Mass Hall", "Hurlbut", "Wigglesworth"],
        };
 
 
-d3.json('sample.json', function(json) {
-    users_array = json.users
-    number_of_users = users_array.length
-    json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
+d3.json('times.json', function(json) {
+    times_array = json.times
+    number_of_users = times_array.length
+    json.times.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
         && (filters['Year'].indexOf(n.class_year)>=0) 
-        && (filters['House'].indexOf(n.dorm)>=0))
+        && (filters['House'].indexOf(n.dorm)>=0)
+        && (n.signup_time != null))
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
         console.log("mark");
-        console.log(Date.parse(d.date));
-        var stuff = new Date(Date.parse(d.date));
-        console.log(stuff);
+        console.log(Date.parse(d.signup_time));
+        d.date = new Date(Date.parse(d.signup_time));
         console.log(d.date);
         d.response = total_people
         total_people +=1
     })
 
 
-    console.log(total_people);
-
-
-    x.domain(d3.extent(users_array, function(d) { console.log(d.date); return d.date; }));
-    y.domain([0, d3.max(users_array, function(d) { return d.response; })]);
+    x.domain(d3.extent(times_array, function(d) { return d.date; }));
+    y.domain([0, d3.max(times_array, function(d) { return d.response; })]);
 
         // Nest the entries by symbol
     var dataNest = d3.nest()
         .key(function(d) {return d.dorm;})
-        .entries(users_array);
+        .entries(times_array);
     var color = d3.scale.category10();   // set the colour scale
     
     legendSpace = width/dataNest.length; // spacing for the legend
     
     // Loop through each house 
     dataNest.forEach(function(d,i) { 
-        console.log(d.values);
+        // console.log(d.values);
         svg.append("path")
             .attr("class", "line")
             .style("stroke", function() { // Add the colours dynamically
