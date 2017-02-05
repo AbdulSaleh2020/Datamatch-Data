@@ -114,8 +114,8 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) {console.log(x(d.date)); return x(d.date); })
-    .y(function(d) { return y(d.response); })
+    .x(function(d) {console.log("raynor");console.log(x(d.date)); return x(d.date); })
+    .y(function(d) { console.log(d.response);return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
     
@@ -134,11 +134,11 @@ var filters = {
         'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer", "Canaday", "Mower", "Holworthy", "Hollis", "Greenough", "Weld", "Matthews", "Grays", "Lionel", "Mass Hall", "Hurlbut", "Wigglesworth", "Stoughton", "Apley"],
        };
 
-
+var times_array;
 d3.json('times.json', function(json) {
     times_array = json.times
     number_of_users = times_array.length
-    json.times.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
+    times_array.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
         && (filters['Year'].indexOf(n.class_year)>=0) 
         && (filters['House'].indexOf(n.dorm)>=0)
         && (n.signup_time != null))
@@ -153,6 +153,8 @@ d3.json('times.json', function(json) {
         total_people +=1
     })
 
+    console.log(times_array);
+
 
     x.domain(d3.extent(times_array, function(d) { return d.date; }));
     y.domain([0, d3.max(times_array, function(d) { return d.response; })]);
@@ -163,62 +165,67 @@ d3.json('times.json', function(json) {
         .entries(times_array);
     var color = d3.scale.category10();   // set the colour scale
     
-    legendSpace = width/dataNest.length; // spacing for the legend
+    legendSpace = width / dataNest.length; // spacing for the legend
     
-    // Loop through each house 
-    dataNest.forEach(function(d,i) { 
-        // console.log(d.values);
-        svg.append("path")
+    svg.append("path")
+            .datum(times_array)
             .attr("class", "line")
-            .style("stroke", function() { // Add the colours dynamically
-                return d.color = color(d.key); })
-            .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
-            .attr("d", responseline(d.values));
+            .attr("d", responseline);
+
+    // Loop through each house 
+    // dataNest.forEach(function(d,i) { 
+    //     // console.log(d.values);
+    //     svg.append("path")
+    //         .attr("class", "line")
+    //         .style("stroke", function() { // Add the colours dynamically
+    //             return d.color = color(d.key); })
+    //         .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
+    //         .attr("d", responseline(d.values));
         
-        svg.append("rect")
-            .attr("width", 60)
-            .attr("height", 40)
-            .attr("fill", "#B7B7B7")
-            .attr("x", (legendSpace/2)+i*legendSpace - 30)
-            .attr("y", height + (margin.bottom/2) - 20)
-            .on("click", function(){
-                // Determine if current line is visible 
-                var active   = d.active ? false : true,
-                newOpacity = active ? 0 : 1; 
+    //     svg.append("rect")
+    //         .attr("width", 60)
+    //         .attr("height", 40)
+    //         .attr("fill", "#B7B7B7")
+    //         .attr("x", (legendSpace/2)+i*legendSpace - 30)
+    //         .attr("y", height + (margin.bottom/2) - 20)
+    //         .on("click", function(){
+    //             // Determine if current line is visible 
+    //             var active   = d.active ? false : true,
+    //             newOpacity = active ? 0 : 1; 
 
-                // Hide or show the elements based on the ID
-                d3.select("#tag"+d.key.replace(/\s+/g, ''))
-                    .transition().duration(100) 
-                    .style("opacity", newOpacity); 
-                // Update whether or not the elements are active
-                d.active = active;
+    //             // Hide or show the elements based on the ID
+    //             d3.select("#tag"+d.key.replace(/\s+/g, ''))
+    //                 .transition().duration(100) 
+    //                 .style("opacity", newOpacity); 
+    //             // Update whether or not the elements are active
+    //             d.active = active;
 
-                d3.select(this)
-                    .transition().duration(100)
-                    .attr("fill", function() { return d.color = color(d.key); })
-                });
+    //             d3.select(this)
+    //                 .transition().duration(100)
+    //                 .attr("fill", function() { return d.color = color(d.key); })
+    //             });
 
-        svg.append("text")
-            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-            .attr("y", height + (margin.bottom/2)+ 5)
-            .attr("class", "legend")    // style the legend
-            .style("fill", function() { // Add the colours dynamically
-                return d.color = color(d.key); })
-            .on("click", function(){
-                // Determine if current line is visible 
-                var active   = d.active ? false : true,
-                newOpacity = active ? 0 : 1; 
+    //     svg.append("text")
+    //         .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+    //         .attr("y", height + (margin.bottom/2)+ 5)
+    //         .attr("class", "legend")    // style the legend
+    //         .style("fill", function() { // Add the colours dynamically
+    //             return d.color = color(d.key); })
+    //         .on("click", function(){
+    //             // Determine if current line is visible 
+    //             var active   = d.active ? false : true,
+    //             newOpacity = active ? 0 : 1; 
 
-                // Hide or show the elements based on the ID
-                d3.select("#tag"+d.key.replace(/\s+/g, ''))
-                    .transition().duration(100) 
-                    .style("opacity", newOpacity); 
-                // Update whether or not the elements are active
-                d.active = active;
-                })  
-            .text(d.key); 
-        })
-    })
+    //             // Hide or show the elements based on the ID
+    //             d3.select("#tag"+d.key.replace(/\s+/g, ''))
+    //                 .transition().duration(100) 
+    //                 .style("opacity", newOpacity); 
+    //             // Update whether or not the elements are active
+    //             d.active = active;
+    //             })  
+    //         .text(d.key); 
+    //     })
+    // })
 
 
 // Get the data
@@ -289,7 +296,7 @@ d3.json('times.json', function(json) {
 //                 d.active = active;
 //                 })  
 //             .text(d.key); 
-//     });
+    });
     // Add the X Axis
     svg.append("g")
         .attr("class", "x axis")
