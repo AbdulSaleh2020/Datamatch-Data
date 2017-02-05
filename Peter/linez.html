@@ -95,6 +95,7 @@ var margin = {top: 30, right: 20, bottom: 70, left: 50},
 
 // Parse the date / time
 var parseTime = d3.time.format("%d%H%M").parse;
+var parseTime2 = d3.time.format("%Y-%m-%dT%H:%M:%S%Z");
 
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
@@ -102,14 +103,14 @@ var y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
+    .tickFormat(d3.time.format('%H%M'))
     .orient("bottom").ticks(5);
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
 
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) { console.log(x(0.5));
-        return x(d.time); })
+    .x(function(d) {console.log(x(d.date)); return x(d.date); })
     .y(function(d) { return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
@@ -126,7 +127,7 @@ var total_people = 1;
 var filters = {
         'Year': ['Freshman', 'Sophomore', 'Junior', 'Senior'],
         'Gender': ['Male','Female'],
-        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Freshmen"],
+        'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer"],
        };
 
 
@@ -139,7 +140,8 @@ d3.json('sample.json', function(json) {
         })
     // Create a variable for number of people signed up already
     .forEach(function(d) {
-        d.date = (Date.parse(d.date)-1329582512000)/(1329600512000-1329582512000);
+        console.log(parseTime(Date.parse(d.date)));
+        d.date = new Date(Date.parse(d.date));
         console.log(d.date);
         d.response = total_people
         total_people +=1
@@ -148,7 +150,7 @@ d3.json('sample.json', function(json) {
     console.log(total_people);
 
 
-    x.domain(d3.extent(users_array, function(d) { return d.date; }));
+    x.domain(d3.extent(users_array, function(d) { console.log(d.date); console.log("SARA"); return d.date; }));
     y.domain([0, d3.max(users_array, function(d) { return d.response; })]);
 
         // Nest the entries by symbol
