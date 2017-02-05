@@ -108,7 +108,7 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) { console.log(x(d.date));
+    .x(function(d) { console.log(x(0.5));
         return x(d.time); })
     .y(function(d) { return y(d.response); })
 // interpolate smooths out the line for those lean looks
@@ -140,7 +140,7 @@ d3.json('sample.json', function(json) {
     // Create a variable for number of people signed up already
     .forEach(function(d) {
         d.date = (Date.parse(d.date)-1329582512000)/(1329600512000-1329582512000);
-        console.log((d.date - 1329582512000)/(1329600512000-1329582512000));
+        console.log(d.date);
         d.response = total_people
         total_people +=1
     })

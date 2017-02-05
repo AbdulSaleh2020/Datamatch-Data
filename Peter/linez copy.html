@@ -83,10 +83,10 @@ var xAxis = d3.svg.axis().scale(x)
     .orient("bottom").ticks(5);
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
-
+console.log(x(0.5));
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) { console.log(x(d.time)); return x(d.time); })
+    .x(function(d) { console.log(x(0)); return x(d.time); })
     .y(function(d) { return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
