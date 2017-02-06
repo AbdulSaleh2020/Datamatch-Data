@@ -1,11 +1,116 @@
 <!DOCTYPE html>
-<svg width="960" height="500"></svg>
-<meta charset="utf-8">
+
+<head>
+	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/css?family=Sintony:700" rel="stylesheet">
+</head>
+
+<style type="text/css">
+
+	.button {
+            display: inline-block;
+            padding: .8em;
+            background-color: #B7B7B7;
+            text-decoration: none;
+            color: white;
+       		margin-left: 1%;
+            margin-right: 1%;
+        }
+        
+        .hvr-fade {
+            display: inline-block;
+            vertical-align: middle;
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            overflow: hidden;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-property: color, background-color;
+            transition-property: color, background-color;
+        }
+
+        .hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
+            background-color: #9B1B00;
+            color: white;
+        }
+
+	#my-wrapper {
+         position:relative; 
+         padding-top: 15px;
+    }
+
+    #title {
+         font-family: 'Sintony', sans-serif;
+         font-size: 36px;
+         text-align: center;
+         margin-top: 0px;
+         
+    }
+
+    svg {
+    	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #subtitle{
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            vertical-align: center;
+            text-align: center;
+            margin: auto;
+            padding-top: .6%;
+            max-width: 490px;
+            font-weight: medium;
+            padding-bottom: 1%;
+        }
+
+     .selected {
+            background-color: #9B1B00;
+        }
+
+</style>
+
+<body style="background-color: #E7E7E7;">
+	<div id="my-wrapper">
+		<div id="title">
+			Live Sign-Ups
+		</div>
+		<div id="subtitle">
+			Check out how many people are signing in to Datamatch live in the graph below. Filter by gender, house, or year.
+		</div>
+		<center>
+			
+			<div id="button-container">
+				<center> 
+						<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="Gender" onClick="clicked(1)">
+        				<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="House" onClick="clicked(2)">
+        				<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="Year" onClick="clicked(3)">
+        			</center>
+				<svg width="960" height="500" style="z-index: 0;"></svg>
+    		</div>
+			
+		</center>
+	</div>
+</body>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-
+var clickedvar = 0;
+console.log(clickedvar);
+function clicked(n){
+	if (n==1) {
+		clickedvar = 1;
+	}
+	else if (n==2) {
+		clickedvar = 2;
+	}
+	else if (n==3) {
+		clickedvar = 3;
+	}
+	console.log(clickedvar);
+}
 var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    margin = {top: 70, right: 80, bottom: 90, left: 100},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -51,11 +156,12 @@ d3.json("times.json", function(d) {
       total_people +=1
 
   })
+     
 
-//This must go before filtering by gender etc because when we change d.response it modifies things here.  
-
-//FOR ALL OPTION
-if (0==1){
+d3.selectAll("input.filter-button").on('click', function(){
+		d3.selectAll("input.filter-button").classed("selected", false)
+        d3.select(this).classed("selected", true);
+        if (clickedvar == 0){
   x.domain(d3.extent(times_array, function(d) { return d.date; }));
   y.domain(d3.extent(times_array, function(d) { return d.response; }));
 
@@ -78,7 +184,7 @@ if (0==1){
 }
 
 //GENDER
-else if (1==2){
+else if (clickedvar == 1){
 
   girls_array = times_array
   girls_array = girls_array.filter(function(n){return (n.gender=="Female");})
@@ -146,7 +252,7 @@ else if (1==2){
 
 //Freshman Stuff
 
-else if(1==1){
+else if(clickedvar == 3){
   freshman_array = times_array
   freshman_array = freshman_array.filter(function(n){return (n.class_year=="Freshman");})
   var total_freshman = 1;
@@ -264,7 +370,8 @@ else if(1==1){
 
 }
 //END OF YEAR
-else if(1==1){
+
+else if(clickedvar == 2){
   mather_array = times_array
   mather_array = mather_array.filter(function(n){return (n.class_year=="Mather");})
   var total_mather = 1;
@@ -620,9 +727,9 @@ else if(1==1){
       .remove();
   })
 
+            });
 
-  
-
+//For ALL
 
 
 
