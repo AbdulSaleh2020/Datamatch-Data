@@ -68,6 +68,11 @@
             background-color: #9B1B00;
         }
 
+      #myText{
+
+
+      }
+
 </style>
 
 <body style="background-color: #E7E7E7;">
@@ -87,6 +92,7 @@
         				<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="Year" onClick="clicked(3)">
         			</center>
 				<svg width="960" height="500" style="z-index: 0;"></svg>
+        <div id="myText"></div>
     		</div>
 			
 		</center>
@@ -97,7 +103,7 @@
 var clickedvar = 0;
 
 function clicked(n){
-
+d3.select("g").selectAll("*").remove()
 	if (n==1) {
 		clickedvar = 1;
 	}
@@ -141,6 +147,7 @@ function randomDate(start, end) {
 }
 
 d3.json("times.json", function(d) {
+
   console.log(d.times);
   times_array = d.times
   times_array = times_array;
@@ -160,7 +167,57 @@ d3.json("times.json", function(d) {
       total_people +=1
 
   })
-     
+
+//First load all
+x.domain(d3.extent(times_array, function(d) { return d.date; }));
+  y.domain(d3.extent(times_array, function(d) { return d.response; }));
+
+  g.append("path")
+    .datum(times_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {  
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Total");                                
+      d3.select(this)                        
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {
+    d3.selectAll("#myText").remove()   
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+ g.append("g")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("fill", "#000")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("Number of People Signed Up");
+
+  g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+      .append("text")
+        .text("Date")
+        .attr("fill", "#000")
+        .attr("x", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+    .select(".domain")
+      .remove();
 
 d3.selectAll("input.filter-button").on('click', function(){
 		d3.selectAll("input.filter-button").classed("selected", false)
@@ -228,9 +285,19 @@ else if (clickedvar == 1){
     .style("stroke-width", "2.5px")
     .on("mouseover", function (d) {                                  
       d3.select(this)                         
-      .style("stroke-width",'6px')
+      .style("stroke-width",'6px');
+      
+      d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Female");
+
       })
-    .on("mouseout", function(d) {        
+    .on("mouseout", function(d) { 
+      d3.selectAll("#myText").remove();
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -245,9 +312,18 @@ else if (clickedvar == 1){
     .style("stroke-width", "2.5px")
     .on("mouseover", function (d) {                                  
       d3.select(this)                 
-      .style("stroke-width",'6px')
+      .style("stroke-width",'6px');
+
+       d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Male");
       })
-    .on("mouseout", function(d) {        
+    .on("mouseout", function(d) {
+    d3.selectAll("#myText").remove();     
       d3.select(this)
       .style("stroke-width",'2.5px')});
 } //End if statement
@@ -313,11 +389,19 @@ else if(clickedvar == 3){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Freshmen");                                  
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -330,11 +414,19 @@ else if(clickedvar == 3){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {  
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Sophomores");                                
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -347,11 +439,19 @@ else if(clickedvar == 3){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Juniors");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -364,11 +464,19 @@ else if(clickedvar == 3){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Seniors");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -512,11 +620,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Mather");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -529,11 +645,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Dunster");                                  
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -546,11 +670,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Leverett");                                  
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -563,11 +695,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Kirkland");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -580,11 +720,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Eliot");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -597,11 +745,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Winthrop");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -614,11 +770,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Lowell");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -631,11 +795,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Adams");                                  
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
       
@@ -648,11 +820,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Quincy");                                 
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -665,11 +845,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {  
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Cabot");                                
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -682,11 +870,19 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {   
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Currier");                               
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()       //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 
@@ -699,12 +895,20 @@ else if(clickedvar == 2){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) {
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Pforzheimer");                                  
       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
       .style("stroke-width",'6px')
-     
+
       })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
+    .on("mouseout", function(d) {  
+    d3.selectAll("#myText").remove()      //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
 }
