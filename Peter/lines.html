@@ -12,6 +12,9 @@ var svg = d3.select("svg"),
 
 var total_people = 1;
 var times_array;
+var boys_array;
+var girls_array;
+
 var parseTime = d3.timeParse("%d-%b-%y");
 
 var x = d3.scaleTime()
@@ -31,12 +34,12 @@ function randomDate(start, end) {
 d3.json("times.json", function(d) {
   console.log(d.times);
   times_array = d.times
-  times_array = times_array.slice(0,20);
+  times_array = times_array;
   times_array
   .forEach(function(d) {
       if (d.signup_time == null) {
-        thing = new Date(Date.parse("2016-02-09T07:31:30.000Z"));
-        d.date = randomDate(new Date(Date.parse("2016-02-07T07:31:30.000Z")), new Date(Date.parse("2016-05-30T05:30:49.000Z")))
+        // thing = new Date(Date.parse("2016-02-09T07:31:30.000Z"));
+        d.date = randomDate(new Date(Date.parse("2016-02-07T07:31:30.000Z")), new Date(Date.parse("2017-01-30T05:30:49.000Z")))
       } 
       else {
         d.date = new Date(Date.parse(d.signup_time));
@@ -48,11 +51,13 @@ d3.json("times.json", function(d) {
       total_people +=1
 
   })
-      console.log(times_array);
       x.domain(d3.extent(times_array, function(d) { return d.date; }));
-      console.log(d3.extent(times_array, function(d) { return d.date; }));
+
       y.domain(d3.extent(times_array, function(d) { return d.response; }));
-      console.log(d3.extent(times_array, function(d) { return d.response; }));
+
+  girls_array = times_array
+  girls_array.filter(function(n) {return (n.gender=="Female")})
+
   
   console.log(x);
   g.append("g")
@@ -68,8 +73,15 @@ d3.json("times.json", function(d) {
   g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
+      .append("text")
+        .text("Date")
+        .attr("fill", "#000")
+        .attr("x", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
     .select(".domain")
       .remove();
+
 
 console.log(line);
   g.append("path")
@@ -79,14 +91,36 @@ console.log(line);
     .attr("stroke", "steelblue")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round")
-    .attr("stroke-width", 1.5);
-
-  })
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
   // //     .datum(times_array, function(d){return d.date})
   
 
 
-
+// g.append("path")
+//     .datum(girls_array)
+//     .attr("d", line)
+//     .attr("fill", "none")
+//     .attr("stroke", "steelblue")
+//     .attr("stroke-linejoin", "round")
+//     .attr("stroke-linecap", "round")
+//     .attr("stroke-width", 1.5)
+//     .style("stroke-width", "2.5px")
+//     .on("mouseover", function (d) {                                  
+//       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+//       .style("stroke-width",'6px')
+//       })
+//     .on("mouseout", function(d) {        //undo everything on the mouseout
+//       d3.select(this)
+//       .style("stroke-width",'2.5px')});
+  })
 
 
 

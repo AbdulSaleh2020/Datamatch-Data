@@ -261,9 +261,10 @@ d3.csv(sheet_string, function(error, data) {
     .range(color2)
     .domain(["A", "B", "C", "D", "E"]);
   //Goes through each row and analyzes it by setting attributes like d["A"] which tell it how far accross the page that bar for that question goes and d["labelA"] which tell it what that label is.
+  var iter = 0;
   data.forEach(function(d) {
     //d[1] refers to what is in column labeled 1 in our csv.  N is a column in our spreadsheet with total answers
-    d["A"] = +d[1]*100/d.N; //Calculating percentages
+    d["A"] = +update[iter][0]; //Calculating percentages
     d["B"] = +d[2]*100/d.N;
     d["C"] = +d[3]*100/d.N;
     d["D"] = +d[4]*100/d.N;
@@ -275,6 +276,7 @@ d3.csv(sheet_string, function(error, data) {
     d["labelC"] = d.labelC;
     d["labelD"] = d.labelD;
     d["labelE"] = d.labelE;
+    iter +=1;
     var x0 = 0; 
     var idx = 0;
     var N = 4196;
@@ -407,26 +409,7 @@ d3.csv(sheet_string, function(error, data) {
 
 });
 }
-//End of legend stuff.
 
-// all pie chart stuff
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  
-
-    // d3.selectAll("input") //Input is defined with the checkboxes.
-    //     .on("change", change);
-
-      //This is the function that changes the analysis pie charts when boxes are checked.
-
-    //On change the function has to calculate new values for things in the pie chart.  It does this by seeing what the checkboxes want then sorting all data according to that.  
-    
-
-  // Store the displayed angles in _current.
-  // Then, interpolate from _current to the new angles.
-  // During the transition, _current is updated in-place by d3.interpolate.
   function arcTween(a) {
     var i = d3.interpolate(this._current, a);
     this._current = i(0);
