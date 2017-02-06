@@ -90,6 +90,7 @@
 						<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="Gender" onClick="clicked(1)">
         				<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="House" onClick="clicked(2)">
         				<input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="Year" onClick="clicked(3)">
+                <input style="float: bottom; z-index: 1;" class="filter-button button hvr-fade" type="button" name="dataset" value="All" onClick="clicked(0)">
         			</center>
 				<svg width="960" height="500" style="z-index: 0;"></svg>
         <div id="myText"></div>
@@ -113,6 +114,9 @@ d3.select("g").selectAll("*").remove()
 	else if (n==3) {
 		clickedvar = 3;
 	}
+  else if (n==0) {
+    clickedvar = 0;
+  }
 }
 
 
@@ -222,7 +226,14 @@ x.domain(d3.extent(times_array, function(d) { return d.date; }));
 d3.selectAll("input.filter-button").on('click', function(){
 		d3.selectAll("input.filter-button").classed("selected", false)
         d3.select(this).classed("selected", true);
-        if (clickedvar == 0){
+        console.log(clickedvar)
+if (clickedvar == 0){
+  times_array.sort(function (a,b) {return (new Date(a.date) - new Date(b.date))})
+  times_array.forEach(function(d){
+      d.response = total_people
+      total_people +=1
+
+  })
   x.domain(d3.extent(times_array, function(d) { return d.date; }));
   y.domain(d3.extent(times_array, function(d) { return d.response; }));
 
@@ -235,11 +246,19 @@ d3.selectAll("input.filter-button").on('click', function(){
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
     .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
+    .on("mouseover", function (d) { 
+    d3.select("g").append("text")
+               .attr("id", "myText")
+               .attr("text-anchor", "middle")
+               .style("font-size", "18px")
+               .attr("x", 400)
+               .attr("y", 40)
+                .text("Total");                                
       d3.select(this)                        
       .style("stroke-width",'6px')
       })
-    .on("mouseout", function(d) {   
+    .on("mouseout", function(d) { 
+    d3.selectAll("#myText").remove()    
       d3.select(this)
       .style("stroke-width",'2.5px')});
 }
@@ -690,7 +709,7 @@ else if(clickedvar == 2){
     .datum(kirkland_array)
     .attr("d", line)
     .attr("fill", "none")
-    .attr("stroke", "#0021B1")
+    .attr("stroke", "#8c00ff")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
@@ -715,7 +734,7 @@ else if(clickedvar == 2){
     .datum(eliot_array)
     .attr("d", line)
     .attr("fill", "none")
-    .attr("stroke", "#0021B1")
+    .attr("stroke", "#ff3700")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
