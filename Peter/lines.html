@@ -264,6 +264,337 @@ else if(1==1){
 
 }
 //END OF YEAR
+else if(1==1){
+  mather_array = times_array
+  mather_array = mather_array.filter(function(n){return (n.class_year=="Mather");})
+  var total_mather = 1;
+  mather_array.forEach(function(d){
+    d.response = total_mather
+    total_mather += 1;
+    })
+
+//Dunster Stuff
+  dunster_array = times_array
+  dunster_array = dunster_array.filter(function(n){return (n.class_year=="Dunster");})
+  var total_dunster = 1;
+  dunster_array.forEach(function(d){
+    d.response = total_dunster
+    total_dunster += 1;
+    })
+
+//Leverett Stuff
+  leverett_array = times_array
+  leverett_array = leverett_array.filter(function(n){return (n.class_year=="Leverett");})
+  var total_leverett = 1;
+  leverett_array.forEach(function(d){
+    d.response = total_leverett
+    total_leverett += 1;
+    })
+
+//Kirkland Stuff
+  kirkland_array = times_array
+  kirkland_array = kirkland_array.filter(function(n){return (n.class_year=="Kirkland");})
+  var total_kirkland = 1;
+  kirkland_array.forEach(function(d){
+    d.response = total_kirkland
+    total_kirkland += 1;
+    })
+    
+  eliot_array = times_array
+  eliot_array = eliot_array.filter(function(n){return (n.class_year=="Eliot");})
+  var total_eliot = 1;
+  eliot_array.forEach(function(d){
+    d.response = total_eliot
+    total_eliot += 1;
+    })
+
+//Dunster Stuff
+  winthrop_array = times_array
+  winthrop_array = winthrop_array.filter(function(n){return (n.class_year=="Winthrop");})
+  var total_winthrop = 1;
+  winthrop_array.forEach(function(d){
+    d.response = total_winthrop
+    total_winthrop += 1;
+    })
+
+//Leverett Stuff
+  lowell_array = times_array
+  lowell_array = lowell_array.filter(function(n){return (n.class_year=="Lowell");})
+  var total_lowell = 1;
+  lowell_array.forEach(function(d){
+    d.response = total_lowell
+    total_lowell += 1;
+    })
+
+//Kirkland Stuff
+  quincy_array = times_array
+  quincy_array = quincy_array.filter(function(n){return (n.class_year=="Quincy");})
+  var total_quincy = 1;
+  quincy_array.forEach(function(d){
+    d.response = total_quincy
+    total_qunicy += 1;
+    })
+
+  adams_array = times_array
+  adams_array = adams_array.filter(function(n){return (n.class_year=="Adams");})
+  var total_adams = 1;
+  adams_array.forEach(function(d){
+    d.response = total_adams
+    total_adams += 1;
+    })
+
+//Dunster Stuff
+  cabot_array = times_array
+  cabot_array = cabot_array.filter(function(n){return (n.class_year=="Cabot");})
+  var total_cabot = 1;
+  cabot_array.forEach(function(d){
+    d.response = total_cabot
+    total_cabot += 1;
+    })
+
+//Leverett Stuff
+  currier_array = times_array
+  currier_array = currier_array.filter(function(n){return (n.class_year=="Currier");})
+  var total_currier = 1;
+  currier_array.forEach(function(d){
+    d.response = total_currier
+    total_currier += 1;
+    })
+
+//Kirkland Stuff
+  pforzheimer_array = times_array
+  pforzheimer_array = pforzheimer_array.filter(function(n){return (n.class_year=="Pforzheimer");})
+  var total_Pforzheimer = 1;
+  pforzheimer_array.forEach(function(d){
+    d.response = total_pforzheimer
+    total_pforzheimer += 1;
+    })
+
+  //They all have same date extent
+  x.domain(d3.extent(times_array, function(d) { return d.date; }));
+  //Must find max extent of response axis
+  var extent = [0,0];
+  var mather_extent = d3.extent(mather_array, function(d) { return d.response; });
+  var dunster_extent = d3.extent(dunster_array, function(d) { return d.response; });
+  var leverett_extent = d3.extent(leverett_array, function(d) { return d.response; });
+  var kirkland_extent = d3.extent(kirkland_array, function(d) { return d.response; });
+  var eliot_extent = d3.extent(eliot_array, function(d) { return d.response; });
+  var winthrop_extent = d3.extent(winthrop_array, function(d) { return d.response; });
+  var quincy_extent = d3.extent(quincy_array, function(d) { return d.response; });
+  var lowell_extent = d3.extent(lowell_array, function(d) { return d.response; });
+  var adams_extent = d3.extent(adams_array, function(d) { return d.response; });
+  var cabot_extent = d3.extent(cabot_array, function(d) { return d.response; });
+  var currier_extent = d3.extent(currier_array, function(d) { return d.response; });
+  var pforzheimer_extent = d3.extent(pforzheimer_array, function(d) { return d.response; });
+  
+  extent[0] = Math.min(mather_extent[0], dunster_extent[0], leverett_extent[0], kirkland_extent[0], eliot_extent[0], winthrop_extent[0], quincy_extent[0], lowell_extent[0], adams_extent[0], cabot_extent[0], currier_extent[0], pforzheimer_extent[0])
+  extent[1] = Math.max(mather_extent[1], dunster_extent[1], leverett_extent[1], kirkland_extent[1], eliot_extent[1], winthrop_extent[1], quincy_extent[1], lowell_extent[1], adams_extent[1], cabot_extent[1], currier_extent[1], pforzheimer_extent[1])
+  y.domain(extent);
+  
+  g.append("path")
+    .datum(mather_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(dunster_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(leverett_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(kirkland_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(eliot_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(winthrop_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(lowell_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(adams_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+      
+  g.append("path")
+    .datum(quincy_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(cabot_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(currier_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(pforzheimer_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+}
 
 //Axes Stuff
   g.append("g")
