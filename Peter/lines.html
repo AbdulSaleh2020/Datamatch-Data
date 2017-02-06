@@ -55,11 +55,34 @@ d3.json("times.json", function(d) {
 
       y.domain(d3.extent(times_array, function(d) { return d.response; }));
 
-  girls_array = times_array
-  girls_array.filter(function(n) {return (n.gender=="Female")})
+//This must go before filtering by gender etc because when we change d.response it modifies things here.  
+console.log(line);
+  g.append("path")
+    .datum(times_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                        
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {   
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
 
-  
-  console.log(x);
+//Girls Array Stuff
+  girls_array = times_array
+  girls_array = girls_array.filter(function(n){return (n.gender=="Female");})
+  var total_girls = 1;
+  girls_array.forEach(function(d){
+    d.response = total_girls
+    total_girls += 1;
+    })
+
   g.append("g")
       .call(d3.axisLeft(y))
     .append("text")
@@ -83,9 +106,13 @@ d3.json("times.json", function(d) {
       .remove();
 
 
-console.log(line);
-  g.append("path")
-    .datum(times_array)
+
+
+  
+
+
+g.append("path")
+    .datum(girls_array)
     .attr("d", line)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
@@ -100,26 +127,6 @@ console.log(line);
     .on("mouseout", function(d) {        //undo everything on the mouseout
       d3.select(this)
       .style("stroke-width",'2.5px')});
-  // //     .datum(times_array, function(d){return d.date})
-  
-
-
-// g.append("path")
-//     .datum(girls_array)
-//     .attr("d", line)
-//     .attr("fill", "none")
-//     .attr("stroke", "steelblue")
-//     .attr("stroke-linejoin", "round")
-//     .attr("stroke-linecap", "round")
-//     .attr("stroke-width", 1.5)
-//     .style("stroke-width", "2.5px")
-//     .on("mouseover", function (d) {                                  
-//       d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
-//       .style("stroke-width",'6px')
-//       })
-//     .on("mouseout", function(d) {        //undo everything on the mouseout
-//       d3.select(this)
-//       .style("stroke-width",'2.5px')});
   })
 
 
