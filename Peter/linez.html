@@ -99,10 +99,10 @@ var parseTime2 = d3.time.format("%Y-%m-%dT%H:%M:%S%Z");
 
 // Set the ranges
 var x = d3.time.scale()
-        .nice(d3.time.day)
+        // .nice(d3.time.day)
         .range([0, width]);
 var y = d3.scale.linear()
-    .domain([0, 10])
+    // .domain([0, 10])
     .range([height, 0]);
 
 // Define the axes
@@ -114,8 +114,8 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var responseline = d3.svg.line()   
-    .x(function(d) {console.log("raynor");console.log(x(d.date)); return x(d.date); })
-    .y(function(d) { console.log(d.response);return y(d.response); })
+    .x(function(d) { return x(d.date); })
+    .y(function(d) {return y(d.response); })
 // interpolate smooths out the line for those lean looks
     .interpolate("basis");
     
@@ -134,30 +134,47 @@ var filters = {
         'House': ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot", "Straus", "Pennypacker", "Thayer", "Canaday", "Mower", "Holworthy", "Hollis", "Greenough", "Weld", "Matthews", "Grays", "Lionel", "Mass Hall", "Hurlbut", "Wigglesworth", "Stoughton", "Apley"],
        };
 
+function randomDate(start, end, number) {
+    return new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
+}
+
 var times_array;
 d3.json('times.json', function(json) {
     times_array = json.times
+    times_array = times_array.slice(0,20);
     number_of_users = times_array.length
-    times_array.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
-        && (filters['Year'].indexOf(n.class_year)>=0) 
-        && (filters['House'].indexOf(n.dorm)>=0)
-        && (n.signup_time != null))
-        })
+    // json.times.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) 
+    //     && (filters['Year'].indexOf(n.class_year)>=0) 
+    //     && (filters['House'].indexOf(n.dorm)>=0)
+    //     && (n.signup_time = null))
+    //     })
     // Create a variable for number of people signed up already
+    times_array
     .forEach(function(d) {
-        console.log("mark");
-        console.log(Date.parse(d.signup_time));
-        d.date = new Date(Date.parse(d.signup_time));
-        console.log(d.date);
+        if (d.signup_time == null) {
+            thing = new Date(Date.parse("2016-02-09T07:31:30.000Z"));
+            d.date = randomDate(new Date(Date.parse("2016-02-07T07:31:30.000Z")), new Date(Date.parse("2016-05-30T05:30:49.000Z")))
+        } 
+        else {
+            d.date = new Date(Date.parse(d.signup_time));
+        }
+    })
+    times_array.sort(function (a,b) {return (new Date(a.date) - new Date(b.date))})
+    times_array.forEach(function(d){
         d.response = total_people
         total_people +=1
+        console.log(d.date);
+        console.log(d.response);
     })
 
     console.log(times_array);
 
 
     x.domain(d3.extent(times_array, function(d) { return d.date; }));
-    y.domain([0, d3.max(times_array, function(d) { return d.response; })]);
+    y.domain([0, 80]);
+
+    console.log(d3.extent(times_array, function(d) { return d.date; }))
+    console.log([0, d3.max(times_array, function(d) { return d.response; })])
 
         // Nest the entries by symbol
     var dataNest = d3.nest()
@@ -171,6 +188,8 @@ d3.json('times.json', function(json) {
             .datum(times_array)
             .attr("class", "line")
             .attr("d", responseline);
+
+
 
     // Loop through each house 
     // dataNest.forEach(function(d,i) { 
@@ -301,7 +320,7 @@ d3.json('times.json', function(json) {
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(d3.axisBottom(x));
     // Add the Y Axis
     svg.append("g")
         .attr("class", "y axis")

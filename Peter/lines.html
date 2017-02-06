@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<svg width="960" height="500"></svg>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var total_people = 1;
+var times_array;
+var parseTime = d3.timeParse("%d-%b-%y");
+
+var x = d3.scaleTime()
+    .rangeRound([0, width]);
+
+var y = d3.scaleLinear()
+    .rangeRound([height, 0]);
+
+var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.response); });
+
+function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
+}
+
+d3.json("times.json", function(d) {
+  console.log(d.times);
+  times_array = d.times
+  times_array = times_array.slice(0,20);
+  times_array
+  .forEach(function(d) {
+      if (d.signup_time == null) {
+        thing = new Date(Date.parse("2016-02-09T07:31:30.000Z"));
+        d.date = randomDate(new Date(Date.parse("2016-02-07T07:31:30.000Z")), new Date(Date.parse("2016-05-30T05:30:49.000Z")))
+      } 
+      else {
+        d.date = new Date(Date.parse(d.signup_time));
+      }
+  })
+  times_array.sort(function (a,b) {return (new Date(a.date) - new Date(b.date))})
+  times_array.forEach(function(d){
+      d.response = total_people
+      total_people +=1
+
+  })
+      console.log(times_array);
+      x.domain(d3.extent(times_array, function(d) { return d.date; }));
+      console.log(d3.extent(times_array, function(d) { return d.date; }));
+      y.domain(d3.extent(times_array, function(d) { return d.response; }));
+      console.log(d3.extent(times_array, function(d) { return d.response; }));
+  
+  console.log(x);
+  g.append("g")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("fill", "#000")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("Number of People Signed Up");
+
+  g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+    .select(".domain")
+      .remove();
+
+console.log(line);
+  g.append("path")
+    .datum(times_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5);
+
+  })
+  // //     .datum(times_array, function(d){return d.date})
+  
+
+
+
+
+
+
+</script>
