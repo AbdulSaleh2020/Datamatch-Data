@@ -7,46 +7,145 @@
   crossorigin="anonymous"></script>
 <style>
 
+.button {
+            display: inline-block;
+            padding: .8em;
+            background-color: #B7B7B7;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 4%;
+            margin-top: 4%;
+            cursor: pointer;
+        }
+
+        .button2 {
+            display: inline-block;
+            padding: .8em;
+            background-color: #B7B7B7;
+            text-decoration: none;
+            color: white;
+            font-size:100%;
+            cursor: pointer;
+        }
+        
+        .hvr-fade {
+            display: inline-block;
+            vertical-align: middle;
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            overflow: hidden;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-property: color, background-color;
+            transition-property: color, background-color;
+        }
+      .hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
+            background-color: #9B1B00;
+            color: white;
+        }
+
+        .selected {
+            background-color: #9B1B00;
+        }
+
 .link {
   stroke: #aaa;
 }
 
 .node text {
 stroke:#333;
-cursos:pointer;
+cursor:pointer;
 }
 
 .node circle{
-stroke:#fff;
+stroke:#E7E7E7
 stroke-width:3px;
 fill:#555;
 }
+
+#button-container{
+	float: left;
+	position: relative;
+	vertical-align: middle;
+	text-align: center;
+
+}
+#network-container{
+	float:left;
+	position: relative;
+}
+
+#button2-container{
+	vertical-align: middle;
+	text-align: center;
+	position: relative;
+}
+
+#my-wrapper {
+            position:relative; 
+            padding-top: 15px;
+        }
+
 text {
   font: 10px sans-serif;
 }
 
 </style>
-<body>
-  Id Number:<br>
+<body style="background-color: #E7E7E7;">
+<div id="button-container">
+   See Matches By:<br>
+	  <input onClick="changeclick(1);" id="gender" class="filter-button button hvr-fade" type="button" name="dataset" value="Gender"><br>
+	  <input onClick="changeclick(2);" id="house" class="filter-button button hvr-fade" type="button" name="dataset" value="House"><br>
+	  <input onClick="changeclick(3);" id="year" class="filter-button button hvr-fade" type="button" name="dataset" value="Class Year"><br>
 
-  <input type="number" name="username" id="input"><br>
+  </div>
+  <div id="my-wrapper">
+  <div id="network-container">
+  <div id="button2-container">
+  <input onClick= "assign_random();changeclick(4);" class="button2 hvr-fade" type="button" name="dataset" value="Generate Random Network"><br>
+  </div>
+  </div>
+  </div>
 <script>
 
+var total_size;
+d3.json('jsondatabyID.json', function(json) {
+  total_size = json.nodes.length
+  console.log(total_size);
+  })
+
+
+var id_input;
+var clicked =1;
+
+function changeclick(x) {
+	if (x<4){clicked = x;}
+	console.log(clicked);
+	resetPage(id_input)
+}
+
+function assign_random(){
+	id_input = Math.round(Math.floor(Math.random() * total_size));
+	console.log(id_input);
+}
 
 var w = 960, //* 2,
     h = 500; // *2 ;
 
-var svg = d3.select('body').append('svg')
+var svg = d3.select('#network-container').append('svg')
   .attr('width', w)
   .attr('height', h);
 
   var force = d3.layout.force()
     .size([w,h])
-    .charge(-150)
-    .distance(100)
+    .charge(-300)
+    .distance(150)
+    .friction(.1)
+
 
 $("#input").change(function(){
-  var id_input = $("#input").val();
+  id_input = $("#input").val();
   resetPage(id_input);
 });
 
@@ -94,15 +193,24 @@ d3.json('jsondatabyID.json', function(json) {
     .enter().append("g")
       .attr('class', 'node')
 
+function find_color(d){
+	console.log(d);
+	if (d.Gender == "Female" && clicked==1) {return '#FF3368';} else if (d.Gender== "Male" && clicked==1) {return '#0021B1';} else if (d.House == "Adams" && clicked==2) {return '#b57dce';} else if (d.House== "Cabot" && clicked ==2) {return '#5eabff';} else if (d.House== "Currier" && clicked ==2) {return '#b0ff32';} else if (d.House== "Dunster" && clicked ==2) {return '#82072a';} else if (d.House== "Leverett" && clicked ==2) {return '#ffd70f';} else if (d.House== "Eliot" && clicked ==2) {return '#0021B1';} else if (d.House== "Kirkland" && clicked ==2) {return '#0021B1';} else if (d.House== "Lowell" && clicked ==2) {return '#000e93';} else if (d.House== "Mather" && clicked ==2) {return '#ff8800';} else if (d.House== "Pforzheimer" && clicked ==2) {return '#2a8c00';} else if (d.House== "Quincy" && clicked ==2) {return '#00c4b3';} else if (d.House== "Winthrop" && clicked ==2) {return '#dac4ff';} else if (d.House== "Straus" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Pennypacker" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Thayer" && clicked ==2) {return '#0021B1';} else if (d.House== "Canaday" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Mower" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Holworthy" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Hollis" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Greenough" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Weld" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Matthews" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Grays" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Lionel" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Mass Hall" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Hurlbut" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Wigglesworth" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Stoughton" && clicked ==2) {return '#a3e4ff';} else if (d.House== "Apley" && clicked ==2) {return '#a3e4ff';} else if (d.Year == "Freshman" && clicked ==3) {return '#edff54';} else if (d.Year== "Sophomore" && clicked ==3) {return '#6be5e5';} else if (d.Year== "Junior" && clicked ==3) {return '#ff884c';} else if (d.Year== "Senior" && clicked ==3) {return '#e0332a';}
+}
+
   nodes.append("circle")
       .attr("r","9")
-      .style('fill', function(d){ if (d.Gender == "Female") {return '#FF3368';} else if (d.Gender== "Male") {return '#0021B1';}})
+      .style('fill', function(d){return find_color(d)})
       .call(force.drag)
   nodes.append("text")
       .attr("dx", 12)
       .attr("dy", ".35em")
       .text(function(d) { return d.Id });
 
+   d3.selectAll("input.filter-button").on('click', function(){
+        d3.selectAll("input.filter-button").classed("selected", false)
+        d3.select(this).classed("selected", true);
+   });
 
   force.on("tick", function() {
     links.attr("x1", function(d) { return d.source.x; })
@@ -112,7 +220,6 @@ d3.json('jsondatabyID.json', function(json) {
 
     nodes.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   });
-
 
 
   // Used when trying to load a super big network 
@@ -140,6 +247,7 @@ d3.json('jsondatabyID.json', function(json) {
   // }
 });
 }
+
 
 
 </script>
