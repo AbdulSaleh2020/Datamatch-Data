@@ -1,11 +1,43 @@
 <!DOCTYPE html>
 <html>
+<head>
 <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Sintony:700" rel="stylesheet">
+</head>
+
 
 <style>
 body {
   font: 11px sans-serif;
 }
+.button {
+            display: inline-block;
+            padding: .8em;
+            background-color: #B7B7B7;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .hvr-fade {
+            display: inline-block;
+            vertical-align: middle;
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            overflow: hidden;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-property: color, background-color;
+            transition-property: color, background-color;
+        }
+.hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
+            background-color: #9B1B00;
+            color: white;
+        }
+
+        .selected {
+            background-color: #9B1B00;
+        }
 
 .axis path,
 .axis line {
@@ -18,6 +50,14 @@ body {
   stroke: #000;
 }
 
+#title {
+            font-family: 'Sintony', sans-serif;
+            font-size: 35px;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+
 .tooltip {
   position: absolute;
   width: 220px;
@@ -25,19 +65,18 @@ body {
   pointer-events: none;
 }
 </style>
-<body>
+<body style="background-color: #E7E7E7;">
+<div id="title">Loving and Lovable</div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<form style="margin-top: 45%; margin-left: 5%; float: left; width: 420px; height:00px;">
-</form>
-<input type="checkbox" id="HouseCheck"> House
-<input type="checkbox" id="GenderCheck"> Gender
-<input type="checkbox" id="YearCheck"> Year
+<input class="filter-button button hvr-fade" type="button" id="HouseCheck" value="House">
+<input class="filter-button button hvr-fade" type="button" id="GenderCheck" value="Gender">
+<input class="filter-button button hvr-fade" type="button" id="YearCheck" value="Year">
 
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 800 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 /* 
  * value accessor - returns the value to encode for a given data object.
@@ -101,7 +140,7 @@ svg.append("g")
 
 update();
 
-d3.select("#HouseCheck").on("change",update);
+d3.select("#HouseCheck").on("click",update);
 d3.select("#GenderCheck").on("change",update);
 d3.select("#YearCheck").on("change",update);
 
@@ -121,19 +160,24 @@ d3.csv("matchcomposition.csv", function(error, data) {
     }
   });
 
+ d3.selectAll("input.filter-button").on('click', function(){
+        d3.selectAll("input.filter-button").classed("selected", false)
+                d3.select(this).classed("selected", true);
+ });
+
   var sorted = {};
   for (var i = 0; i < data.length; i++) {
     var description = "";
     var colortype = "";
-    if(d3.select("#GenderCheck").property("checked")){
+    if(d3.select("#GenderCheck").classed("selected", true)){
       description = description + data[i]["Gender"] + " ";
      colortype = data[i]["Gender"];
     }
-    if(d3.select("#YearCheck").property("checked")){
+    if(d3.select("#YearCheck").classed("selected", true)){
       description = description + data[i]["Year"] + " ";
       colortype = data[i]["Year"];
     }
-    if(d3.select("#HouseCheck").property("checked")){
+    if(d3.select("#HouseCheck").classed("selected", true)){
       description = description + data[i]["House"] + " ";
       colortype = data[i]["House"];
     }
@@ -224,16 +268,16 @@ d3.csv("matchcomposition.csv", function(error, data) {
    // Update X Axis
   svg.select(".x.axis")
       .transition()
-      .duration(1000)
+      .duration(500)
       .call(xAxis);
 
   // Update Y Axis
   svg.select(".y.axis")
       .transition()
-      .duration(1000)
+      .duration(500)
       .call(yAxis);
 
-  svg.selectAll(".legend").remove();
+  // svg.selectAll(".legend").remove();
   //d3.select('#legend').selectAll('ul').remove();
 
   // draw legend
@@ -241,19 +285,22 @@ d3.csv("matchcomposition.csv", function(error, data) {
     .data(color.domain())
   .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
+    .attr("transform", function(d, i) { 
+
+      return "translate(0," + i * 10 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
       .attr("x", width + 10)
-      .attr("width", 18)
-      .attr("height", 18)
+      .attr("y", -5)
+      .attr("width", 10)
+      .attr("height", 10)
       .style("fill", color);
 
   // draw legend text
   legend.append("text")
       .attr("x", width )
-      .attr("y", 9)
+      .attr("y", 0)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
       .text(function(d) { return d;});
