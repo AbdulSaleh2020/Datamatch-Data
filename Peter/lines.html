@@ -51,12 +51,14 @@ d3.json("times.json", function(d) {
       total_people +=1
 
   })
-      x.domain(d3.extent(times_array, function(d) { return d.date; }));
-
-      y.domain(d3.extent(times_array, function(d) { return d.response; }));
 
 //This must go before filtering by gender etc because when we change d.response it modifies things here.  
-console.log(line);
+
+//FOR ALL OPTION
+if (0==1){
+  x.domain(d3.extent(times_array, function(d) { return d.date; }));
+  y.domain(d3.extent(times_array, function(d) { return d.response; }));
+
   g.append("path")
     .datum(times_array)
     .attr("d", line)
@@ -73,8 +75,11 @@ console.log(line);
     .on("mouseout", function(d) {   
       d3.select(this)
       .style("stroke-width",'2.5px')});
+}
 
-//Girls Array Stuff
+//GENDER
+else if (1==2){
+
   girls_array = times_array
   girls_array = girls_array.filter(function(n){return (n.gender=="Female");})
   var total_girls = 1;
@@ -83,6 +88,184 @@ console.log(line);
     total_girls += 1;
     })
 
+  //Boys Array Stuff
+  boys_array = times_array
+  boys_array = boys_array.filter(function(n){return (n.gender=="Male");})
+  var total_boys = 1;
+  boys_array.forEach(function(d){
+    d.response = total_boys
+    total_boys += 1;
+    })
+
+  //They all have same date extent
+  x.domain(d3.extent(times_array, function(d) { return d.date; }));
+  //Must find max extent of response axis
+  var extent = [0,0];
+  var girl_extent = d3.extent(girls_array, function(d) { return d.response; });
+  var boy_extent = d3.extent(boys_array, function(d) { return d.response; });
+  extent[0] = Math.min(girl_extent[0], boy_extent[0])
+  extent[1] = Math.max(girl_extent[1], boy_extent[1])
+  y.domain(extent);
+
+  g.append("path")
+    .datum(girls_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                         
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(boys_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                 
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+} //End if statement
+//END OF GENDER
+//YEAR
+
+//Freshman Stuff
+
+else if(1==1){
+  freshman_array = times_array
+  freshman_array = freshman_array.filter(function(n){return (n.class_year=="Freshman");})
+  var total_freshman = 1;
+  freshman_array.forEach(function(d){
+    d.response = total_freshman
+    total_freshman += 1;
+    })
+
+//Sophomore Stuff
+  sophomore_array = times_array
+  sophomore_array = sophomore_array.filter(function(n){return (n.class_year=="Sophomore");})
+  var total_sophomores = 1;
+  sophomore_array.forEach(function(d){
+    d.response = total_sophomores
+    total_sophomores += 1;
+    })
+
+//Junior Stuff
+  junior_array = times_array
+  junior_array = junior_array.filter(function(n){return (n.class_year=="Junior");})
+  var total_juniors = 1;
+  junior_array.forEach(function(d){
+    d.response = total_juniors
+    total_juniors += 1;
+    })
+
+//Senior Stuff
+  senior_array = times_array
+  senior_array = senior_array.filter(function(n){return (n.class_year=="Senior");})
+  var total_seniors = 1;
+  senior_array.forEach(function(d){
+    d.response = total_seniors
+    total_seniors += 1;
+    })
+
+  //They all have same date extent
+  x.domain(d3.extent(times_array, function(d) { return d.date; }));
+  //Must find max extent of response axis
+  var extent = [0,0];
+  var freshman_extent = d3.extent(freshman_array, function(d) { return d.response; });
+  var sophomore_extent = d3.extent(sophomore_array, function(d) { return d.response; });
+  var junior_extent = d3.extent(junior_array, function(d) { return d.response; });
+  var senior_extent = d3.extent(senior_array, function(d) { return d.response; });
+  extent[0] = Math.min(freshman_extent[0], sophomore_extent[0], junior_extent[0], senior_extent[0])
+  extent[1] = Math.max(freshman_extent[1], sophomore_extent[1], junior_extent[1], senior_extent[1])
+  y.domain(extent);
+
+  g.append("path")
+    .datum(freshman_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(sophomore_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(junior_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+  g.append("path")
+    .datum(senior_array)
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .style("stroke-width", "2.5px")
+    .on("mouseover", function (d) {                                  
+      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
+      .style("stroke-width",'6px')
+      })
+    .on("mouseout", function(d) {        //undo everything on the mouseout
+      d3.select(this)
+      .style("stroke-width",'2.5px')});
+
+}
+//END OF YEAR
+
+//Axes Stuff
   g.append("g")
       .call(d3.axisLeft(y))
     .append("text")
@@ -104,30 +287,13 @@ console.log(line);
         .attr("text-anchor", "end")
     .select(".domain")
       .remove();
-
-
+  })
 
 
   
 
 
-g.append("path")
-    .datum(girls_array)
-    .attr("d", line)
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-linejoin", "round")
-    .attr("stroke-linecap", "round")
-    .attr("stroke-width", 1.5)
-    .style("stroke-width", "2.5px")
-    .on("mouseover", function (d) {                                  
-      d3.select(this)                          //on mouseover of each line, give it a nice thick stroke
-      .style("stroke-width",'6px')
-      })
-    .on("mouseout", function(d) {        //undo everything on the mouseout
-      d3.select(this)
-      .style("stroke-width",'2.5px')});
-  })
+
 
 
 
