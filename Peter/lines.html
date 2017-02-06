@@ -92,12 +92,12 @@
 		</center>
 	</div>
 </body>
-
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 var clickedvar = 0;
-console.log(clickedvar);
+
 function clicked(n){
+
 	if (n==1) {
 		clickedvar = 1;
 	}
@@ -107,13 +107,17 @@ function clicked(n){
 	else if (n==3) {
 		clickedvar = 3;
 	}
-	console.log(clickedvar);
 }
+
+
+
+
 var svg = d3.select("svg"),
     margin = {top: 70, right: 80, bottom: 90, left: 100},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 var total_people = 1;
 var times_array;
@@ -372,8 +376,9 @@ else if(clickedvar == 3){
 //END OF YEAR
 
 else if(clickedvar == 2){
+
   mather_array = times_array
-  mather_array = mather_array.filter(function(n){return (n.class_year=="Mather");})
+  mather_array = mather_array.filter(function(n){return (n.dorm=="Mather");})
   var total_mather = 1;
   mather_array.forEach(function(d){
     d.response = total_mather
@@ -382,7 +387,7 @@ else if(clickedvar == 2){
 
 //Dunster Stuff
   dunster_array = times_array
-  dunster_array = dunster_array.filter(function(n){return (n.class_year=="Dunster");})
+  dunster_array = dunster_array.filter(function(n){return (n.dorm=="Dunster");})
   var total_dunster = 1;
   dunster_array.forEach(function(d){
     d.response = total_dunster
@@ -391,7 +396,7 @@ else if(clickedvar == 2){
 
 //Leverett Stuff
   leverett_array = times_array
-  leverett_array = leverett_array.filter(function(n){return (n.class_year=="Leverett");})
+  leverett_array = leverett_array.filter(function(n){return (n.dorm=="Leverett");})
   var total_leverett = 1;
   leverett_array.forEach(function(d){
     d.response = total_leverett
@@ -400,7 +405,7 @@ else if(clickedvar == 2){
 
 //Kirkland Stuff
   kirkland_array = times_array
-  kirkland_array = kirkland_array.filter(function(n){return (n.class_year=="Kirkland");})
+  kirkland_array = kirkland_array.filter(function(n){return (n.dorm=="Kirkland");})
   var total_kirkland = 1;
   kirkland_array.forEach(function(d){
     d.response = total_kirkland
@@ -408,7 +413,7 @@ else if(clickedvar == 2){
     })
     
   eliot_array = times_array
-  eliot_array = eliot_array.filter(function(n){return (n.class_year=="Eliot");})
+  eliot_array = eliot_array.filter(function(n){return (n.dorm=="Eliot");})
   var total_eliot = 1;
   eliot_array.forEach(function(d){
     d.response = total_eliot
@@ -417,7 +422,7 @@ else if(clickedvar == 2){
 
 //Dunster Stuff
   winthrop_array = times_array
-  winthrop_array = winthrop_array.filter(function(n){return (n.class_year=="Winthrop");})
+  winthrop_array = winthrop_array.filter(function(n){return (n.dorm=="Winthrop");})
   var total_winthrop = 1;
   winthrop_array.forEach(function(d){
     d.response = total_winthrop
@@ -426,7 +431,7 @@ else if(clickedvar == 2){
 
 //Leverett Stuff
   lowell_array = times_array
-  lowell_array = lowell_array.filter(function(n){return (n.class_year=="Lowell");})
+  lowell_array = lowell_array.filter(function(n){return (n.dorm=="Lowell");})
   var total_lowell = 1;
   lowell_array.forEach(function(d){
     d.response = total_lowell
@@ -435,15 +440,15 @@ else if(clickedvar == 2){
 
 //Kirkland Stuff
   quincy_array = times_array
-  quincy_array = quincy_array.filter(function(n){return (n.class_year=="Quincy");})
+  quincy_array = quincy_array.filter(function(n){return (n.dorm=="Quincy");})
   var total_quincy = 1;
   quincy_array.forEach(function(d){
     d.response = total_quincy
-    total_qunicy += 1;
+    total_quincy += 1;
     })
 
   adams_array = times_array
-  adams_array = adams_array.filter(function(n){return (n.class_year=="Adams");})
+  adams_array = adams_array.filter(function(n){return (n.dorm=="Adams");})
   var total_adams = 1;
   adams_array.forEach(function(d){
     d.response = total_adams
@@ -452,7 +457,7 @@ else if(clickedvar == 2){
 
 //Dunster Stuff
   cabot_array = times_array
-  cabot_array = cabot_array.filter(function(n){return (n.class_year=="Cabot");})
+  cabot_array = cabot_array.filter(function(n){return (n.dorm=="Cabot");})
   var total_cabot = 1;
   cabot_array.forEach(function(d){
     d.response = total_cabot
@@ -461,7 +466,7 @@ else if(clickedvar == 2){
 
 //Leverett Stuff
   currier_array = times_array
-  currier_array = currier_array.filter(function(n){return (n.class_year=="Currier");})
+  currier_array = currier_array.filter(function(n){return (n.dorm=="Currier");})
   var total_currier = 1;
   currier_array.forEach(function(d){
     d.response = total_currier
@@ -470,8 +475,8 @@ else if(clickedvar == 2){
 
 //Kirkland Stuff
   pforzheimer_array = times_array
-  pforzheimer_array = pforzheimer_array.filter(function(n){return (n.class_year=="Pforzheimer");})
-  var total_Pforzheimer = 1;
+  pforzheimer_array = pforzheimer_array.filter(function(n){return (n.dorm=="Pforzheimer");})
+  var total_pforzheimer = 1;
   pforzheimer_array.forEach(function(d){
     d.response = total_pforzheimer
     total_pforzheimer += 1;
@@ -703,6 +708,7 @@ else if(clickedvar == 2){
       .style("stroke-width",'2.5px')});
 }
 
+
 //Axes Stuff
   g.append("g")
       .call(d3.axisLeft(y))
@@ -727,12 +733,9 @@ else if(clickedvar == 2){
       .remove();
   })
 
-            });
-
-//For ALL
+           
 
 
-
-
+});
 
 </script>
