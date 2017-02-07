@@ -20,7 +20,7 @@
 <div style="margin-left: auto; margin-right: auto; width: 1400px;">
 <div class = "bigdiv">
 <div id="title">2016 Survey Results</div>
-<center><div style="padding-top: .6%; padding-bottom: 15px; font-size: 16px; max-width: 800px;">Check out questions from last year to see how people answered them.  You can examine different demographics of the Harvard population by selecting various gender and year combinations in the bottom-right box.  Freshmen males and freshmen females are initially selected.  </div></center>
+<center><div style="padding-top: .6%; padding-bottom: 15px; font-size: 16px; max-width: 800px;">This is this year's question answer data, auto-updated.  You can examine different demographics of the Harvard population by selecting various gender and year combinations in the bottom-right box.  Freshmen males and freshmen females are initially selected.  </div></center>
 <!-- BAR CHART -->
 <div id="figure" style=" margin-left: 2%; padding: 0 15px 0 15px; border: dotted; border-color: #e6186d; float:left; margin-bottom: 50px; ">
 	<center><div style="margin-top:3%; margin-bottom:3%;">
@@ -109,7 +109,8 @@ var dataset2 = [
       { label: 'D', count: 40 },
       { label: 'E', count: 40 }
     ];
-var update = [0,0,0,0,0];
+
+
 //Updated values
 
     var path = svg2.selectAll("path") 
@@ -139,6 +140,26 @@ var update = [0,0,0,0,0];
     if(malechecked1==1){property.style.backgroundColor = "#9B1B00"} else if(malechecked1==0){property.style.backgroundColor = "#B7B7B7"};
     var property = document.getElementById('button61');
     if(femalechecked1==1){property.style.backgroundColor = "#9B1B00"} else if(femalechecked1==0){property.style.backgroundColor = "#B7B7B7"};
+
+      var loadquestions = new Array(31);
+        for (var i = 0; i < 31; i++) {
+           loadquestions[i] = [0,0,0,0,0];
+        }  
+
+      d3.json('the.json', function(json) {
+        users_array = json.users
+        number_of_users = users_array.length
+        var number = 1;
+        question_array = json.questions
+        numquestions = question_array.length
+
+        json.users.forEach(function(e) {
+          answers = e.answers
+          for (var i = 0; i<31; i++) {
+            loadquestions[i][(parseInt(answers[i-1]) -1 )%5]+=1
+          }
+        })
+      })
 
 function change1(choice,button_number) {
       //Will store how many answer responses for each answer choice A-E
@@ -173,8 +194,9 @@ function change1(choice,button_number) {
       if(malechecked1==0 && femalechecked1==0){filters['Gender']=filters['Gender'].concat(['Male']).concat(['Female'])};
       if(freshmanchecked1==0 && sophomorechecked1==0 && juniorchecked1==0 &&seniorchecked1==0){filters['Year']=filters['Year'].concat(['Freshman']).concat(['Sophomore']).concat(['Junior']).concat(['Senior'])};
 
+
+
       d3.json('the.json', function(json) {
-        // console.log("worked");
           users_array = json.users
           number_of_users = users_array.length
           json.users.filter(function(n) {return ( (filters['Gender'].indexOf(n.gender)>=0) && (filters['Year'].indexOf(n.class_year)>=0) )})
@@ -240,6 +262,10 @@ var svg = d3.select("#figure").append("svg") //# references ID
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var color = d3.scale.ordinal()
+  .range(color2)
+  .domain(["A", "B", "C", "D", "E"]);
+
 
 //Loads the data for the question responses
 function sheet_shift(n){
@@ -254,21 +280,35 @@ function sheet_shift(n){
 	var property = document.getElementById('page'+sheet_number.toString());
 	property.style.backgroundColor = "#9B1B00"
 
-sheet_string="csv/raw_data"+sheet_number.toString()+".csv"
+sheet_string="csv/fresh_data"+sheet_number.toString()+".csv"
+
+d3.json('the.json', function(json) {
+    //Get all questions
+    questions_array = json.questions
+    questions_array = questions_array.slice((sheet_number-1)*10,sheet_number*10)
+    // .forEach(function(d) {
+    //     // console.log("mark");
+    //     // console.log(Date.parse(d.signup_time));
+    //     // d.date = new Date(Date.parse(d.signup_time));
+    //     console.log(d.date);
+    //     d.response = total_people
+    //     total_people +=1
+    // })
+  })  
+
+
 d3.csv(sheet_string, function(error, data) {
-  //Sets all the colors.
-  var color = d3.scale.ordinal()
-    .range(color2)
-    .domain(["A", "B", "C", "D", "E"]);
   //Goes through each row and analyzes it by setting attributes like d["A"] which tell it how far accross the page that bar for that question goes and d["labelA"] which tell it what that label is.
-  var iter = 0;
+  var iter = 1;
   data.forEach(function(d) {
     //d[1] refers to what is in column labeled 1 in our csv.  N is a column in our spreadsheet with total answers
-    d["A"] = +update[iter][0]; //Calculating percentages
-    d["B"] = +d[2]*100/d.N;
-    d["C"] = +d[3]*100/d.N;
-    d["D"] = +d[4]*100/d.N;
-    d["E"] = +d[5]*100/d.N;
+    var sum = loadquestions[iter][0] + loadquestions[iter][1] + loadquestions[iter][2] + loadquestions[iter][3] +loadquestions[iter][4];
+    console.log(loadquestions[iter][0]);
+    d["A"] = +loadquestions[iter][0]*100/sum; //Calculating percentages
+    d["B"] = +loadquestions[iter][1]*100/sum;
+    d["C"] = +loadquestions[iter][2]*100/sum;
+    d["D"] = +loadquestions[iter][3]*100/sum;
+    d["E"] = +loadquestions[iter][4]*100/sum;
     d["RealQuestion"] = d.RealQuestion //Full question text, for when someone clicks on it.
     d["Question"] = d.Question //Shortened version of the question, to take up less space on very left.
     d["labelA"] = d.labelA; //This is the question option.  The text for what you answered if you answered "A"
@@ -276,11 +316,12 @@ d3.csv(sheet_string, function(error, data) {
     d["labelC"] = d.labelC;
     d["labelD"] = d.labelD;
     d["labelE"] = d.labelE;
-    iter +=1;
+    iter += 1;
     var x0 = 0; 
     var idx = 0;
     var N = 4196;
-    d.boxes = color.domain().map(function(name) { return {labelA: d["labelA"],labelB:d["labelB"],labelC: d["labelC"], labelD: d["labelD"], labelE:d["labelE"],RealQuestion: d["RealQuestion"],Question:d["Question"], name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
+    d.boxes = color.domain().map(function(name) {return {labelA: d["labelA"],labelB:d["labelB"],labelC: d["labelC"], labelD: d["labelD"], labelE:d["labelE"],RealQuestion: d["RealQuestion"],Question:d["Question"], name: name, x0: x0, x1: x0 += +d[name],name2:  d["label" + name], N: +d.N, n: +d[idx += 1]}; });
+    
   }); //Ends data.forEach
 
   var min_val = d3.min(data, function(d) {return d.boxes["0"].x0;});
@@ -409,7 +450,26 @@ d3.csv(sheet_string, function(error, data) {
 
 });
 }
+//End of legend stuff.
 
+// all pie chart stuff
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  
+
+    // d3.selectAll("input") //Input is defined with the checkboxes.
+    //     .on("change", change);
+
+      //This is the function that changes the analysis pie charts when boxes are checked.
+
+    //On change the function has to calculate new values for things in the pie chart.  It does this by seeing what the checkboxes want then sorting all data according to that.  
+    
+
+  // Store the displayed angles in _current.
+  // Then, interpolate from _current to the new angles.
+  // During the transition, _current is updated in-place by d3.interpolate.
   function arcTween(a) {
     var i = d3.interpolate(this._current, a);
     this._current = i(0);
