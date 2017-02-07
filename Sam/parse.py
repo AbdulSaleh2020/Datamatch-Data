@@ -85,5 +85,5 @@ for key in indexDict:
 					# To change back: sourceIndex and targetIndex 
 					connection_dict = {'source':int(spoofDict[sourceNode]), 'target':int(spoofDict[targetNode]), 'eligible':q1, 'interested':q2, 'reverse interest':q3}
 					edges.append(connection_dict)
-myOutput = {'nodes':nodes, 'edges':edges}
+myOutput = {'nodes':newNodes, 'edges':edges}
 print(json.dumps(myOutput))
