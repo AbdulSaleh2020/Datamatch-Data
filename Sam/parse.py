@@ -2,6 +2,8 @@
 #Monday, January 2 2017
 
 import json
+import random
+
 
 myfile = open('data.txt', 'r')
 lines = myfile.readlines()
@@ -32,7 +34,29 @@ for nodeIndex, line in enumerate(lines):
 	indexDict[Id]['index'] = nodeIndex
 	# create an array to hold all the connections that have been added
 	matchesEntered[Id] = []
-	
+
+
+
+### MAKE SPOOF DICTIONARY
+spoofDict = dict()
+options = set(indexDict.keys())
+for key in indexDict:
+	spoofId = key
+	while(spoofId == key):
+		spoofId = random.sample(options, 1)[0]
+		if (len(options) == 1):
+			break
+	options.remove(spoofId)
+	spoofDict[key] = spoofId
+
+### Change the nodes array 
+newNodes =[]
+for j in nodes: 
+	newId = spoofDict[j['Id']]
+	#print("OLD ID: " + str(j['Id']) + "\t NEW ID\t " + str(newId) + "\n")
+	j['Id'] = newId
+	newNodes.append(j)
+
 # Once we've finished building this indexDict, loop through to build edges
 for key in indexDict:
 	# Only take the first 3 matches
@@ -59,7 +83,7 @@ for key in indexDict:
 					# Source ndoe and target node 
 					# Changing this so that it's by source node and target node..
 					# To change back: sourceIndex and targetIndex 
-					connection_dict = {'source':int(sourceNode), 'target':int(targetNode), 'eligible':q1, 'interested':q2, 'reverse interest':q3}
+					connection_dict = {'source':int(spoofDict[sourceNode]), 'target':int(spoofDict[targetNode]), 'eligible':q1, 'interested':q2, 'reverse interest':q3}
 					edges.append(connection_dict)
 myOutput = {'nodes':nodes, 'edges':edges}
 print(json.dumps(myOutput))
