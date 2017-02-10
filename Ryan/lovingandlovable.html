@@ -25,8 +25,8 @@ body {
             transform: perspective(1px) translateZ(0);
             box-shadow: 0 0 1px transparent;
             overflow: hidden;
-            -webkit-transition-duration: 0.3s;
-            transition-duration: 0.3s;
+            -webkit-transition-duration: 0.1s;
+            transition-duration: 0.1s;
             -webkit-transition-property: color, background-color;
             transition-property: color, background-color;
         }
@@ -69,9 +69,9 @@ body {
 <div id="title">Loving and Lovable</div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<input class="filter-button button hvr-fade" type="button" id="HouseCheck" value="House">
-<input class="filter-button button hvr-fade" type="button" id="GenderCheck" value="Gender">
-<input class="filter-button button hvr-fade" type="button" id="YearCheck" value="Year">
+<input class="filter-button button hvr-fade" type="button" onClick = update("house") id="HouseCheck" value="House">
+<input class="filter-button button hvr-fade" type="button" onClick = update("gender") id="GenderCheck" value="Gender">
+<input class="filter-button button hvr-fade" type="button" onClick = update("year") id="YearCheck" value="Year">
 
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -140,12 +140,28 @@ svg.append("g")
 
 update();
 
-d3.select("#HouseCheck").on("click",update);
-d3.select("#GenderCheck").on("change",update);
-d3.select("#YearCheck").on("change",update);
+//d3.select("#HouseCheck").on("click",update);
+//d3.select("#GenderCheck").on("click",update);
+//d3.select("#YearCheck").on("click",update);
 
-function update(){
+//Define click variables
+var genderclicked = 1;
+var yearclicked = 1;
+var houseclicked = 1;
+
+function update(thing){
 // load data
+if (thing == "gender") {
+  genderclicked = (genderclicked + 1) %2 
+}
+else if (thing == "year") {
+  yearclicked = (yearclicked+1) %2
+}
+else {
+  houseclicked = (houseclicked+1) %2
+}
+
+
 d3.csv("matchcomposition.csv", function(error, data) {
   //newData = data.filter(function(d,i){return d % 2 == 0;});
   //newData = data;
@@ -160,32 +176,40 @@ d3.csv("matchcomposition.csv", function(error, data) {
     }
   });
 
- d3.selectAll("input.filter-button").on('click', function(){
-        d3.selectAll("input.filter-button").classed("selected", false)
-                d3.select(this).classed("selected", true);
- });
+var property = document.getElementById('GenderCheck');
+    if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
+var property = document.getElementById('HouseCheck');
+    if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
+var property = document.getElementById('YearCheck');
+    if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
   var sorted = {};
   for (var i = 0; i < data.length; i++) {
     var description = "";
     var colortype = "";
-    if(d3.select("#GenderCheck").classed("selected", true)){
+    //if(d3.select("#GenderCheck").classed("selected", true)){
+    if (genderclicked == 1){
       colortype = data[i]["Gender"];
     }
-    if(d3.select("#YearCheck").classed("selected", true)){
+    //if(d3.select("#YearCheck").classed("selected", true)){
+    if (yearclicked == 1){
       colortype = data[i]["Year"];
     }
-    if(d3.select("#HouseCheck").classed("selected", true)){
+    //if(d3.select("#HouseCheck").classed("selected", true)){
+    if (houseclicked == 1){
       colortype = data[i]["House"];
     }
 
-    if(d3.select("#HouseCheck").classed("selected", true)){
+    //if(d3.select("#HouseCheck").classed("selected", true)){
+    if (houseclicked == 1){
       description = description + data[i]["House"] + " ";
     }
-    if(d3.select("#YearCheck").classed("selected", true)){
+    //if(d3.select("#YearCheck").classed("selected", true)){
+    if (yearclicked == 1){
       description = description + data[i]["Year"] + " ";
     }
-    if(d3.select("#GenderCheck").classed("selected", true)){
+    //if(d3.select("#GenderCheck").classed("selected", true)){
+    if (genderclicked == 1){
       description = description + data[i]["Gender"] + " ";
     }  
 
@@ -234,21 +258,21 @@ d3.csv("matchcomposition.csv", function(error, data) {
         d3.selectAll("#myText").remove()
         d3.select(this).attr("r", 12).style("fill", "red");
         d3.select("svg").append("text")
-          .style("font-size", "20px")
+          .style("font-size", "22px")
           .attr("x", 80)
-          .attr("y", 50)
+          .attr("y", 40)
           .attr("id", "myText")
           .text(d["Description"]);
         d3.select("svg").append("text")
-          .style("font-size", "20px")
+          .style("font-size", "22px")
           .attr("x", 80)
-          .attr("y", 70)
+          .attr("y", 62)
           .attr("id", "myText")
           .text("Loving: " + xValue(d));
         d3.select("svg").append("text")
-          .style("font-size", "20px")
+          .style("font-size", "22px")
           .attr("x", 80)
-          .attr("y", 90)
+          .attr("y", 84)
           .attr("id", "myText")
           .text("Lovable: " + yValue(d));
       })
