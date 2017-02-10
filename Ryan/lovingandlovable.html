@@ -170,17 +170,24 @@ d3.csv("matchcomposition.csv", function(error, data) {
     var description = "";
     var colortype = "";
     if(d3.select("#GenderCheck").classed("selected", true)){
-      description = description + data[i]["Gender"] + " ";
-     colortype = data[i]["Gender"];
+      colortype = data[i]["Gender"];
     }
     if(d3.select("#YearCheck").classed("selected", true)){
-      description = description + data[i]["Year"] + " ";
       colortype = data[i]["Year"];
     }
     if(d3.select("#HouseCheck").classed("selected", true)){
-      description = description + data[i]["House"] + " ";
       colortype = data[i]["House"];
     }
+
+    if(d3.select("#HouseCheck").classed("selected", true)){
+      description = description + data[i]["House"] + " ";
+    }
+    if(d3.select("#YearCheck").classed("selected", true)){
+      description = description + data[i]["Year"] + " ";
+    }
+    if(d3.select("#GenderCheck").classed("selected", true)){
+      description = description + data[i]["Gender"] + " ";
+    }  
 
     if (description in sorted){
       sorted[description]["Likes Given"] += parseInt(data[i]["Likes Given"]);
@@ -219,51 +226,37 @@ d3.csv("matchcomposition.csv", function(error, data) {
       .data(newData)
     .enter().append("circle")
       .attr("class", "dot")
-      .attr("r", 3.5)
+      .attr("r", 5)
       .attr("cx", xMap)
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));}) 
       .on("mouseover", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-          tooltip.html(d["Description"] + "<br/> Loving: " + xValue(d) 
-	        + "<br/> Lovable: " + yValue(d))
-               .style("left", (d3.event.pageX + 5) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
+        d3.selectAll("#myText").remove()
+        d3.select(this).attr("r", 12).style("fill", "red");
+        d3.select("svg").append("text")
+          .style("font-size", "20px")
+          .attr("x", 80)
+          .attr("y", 50)
+          .attr("id", "myText")
+          .text(d["Description"]);
+        d3.select("svg").append("text")
+          .style("font-size", "20px")
+          .attr("x", 80)
+          .attr("y", 70)
+          .attr("id", "myText")
+          .text("Loving: " + xValue(d));
+        d3.select("svg").append("text")
+          .style("font-size", "20px")
+          .attr("x", 80)
+          .attr("y", 90)
+          .attr("id", "myText")
+          .text("Lovable: " + yValue(d));
       })
       .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-      });
+        d3.select(this).attr("r", 5).style("fill", function(d) { return color(cValue(d));}) 
+        //d3.selectAll("#myText").remove()    
 
-  // svg.selectAll("circle")
-  //   .data(newData)  // Update with new data
-  //   .transition()  // Transition from old to new
-  //   .duration(1000)  // Length of animation
-  //   .each("start", function() {  // Start animation
-  //       d3.select(this)  // 'this' means the current element
-  //           .attr("fill", "red")  // Change color
-  //           .attr("r", 5);  // Change size
-  //   })
-  //   .delay(function(d, i) {
-  //       return i / newData.length * 500;  // Dynamic delay (i.e. each item delays a little longer)
-  //   })
-  //   //.ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
-  //   .attr("cx", function(d) {
-  //       return xScale(d[0]);  // Circle's X
-  //   })
-  //   .attr("cy", function(d) {
-  //       return yScale(d[1]);  // Circle's Y
-  //   })
-  //   .each("end", function() {  // End animation
-  //       d3.select(this)  // 'this' means the current element
-  //           .transition()
-  //           .duration(500)
-  //           .attr("fill", "black")  // Change color
-  //           .attr("r", 2);  // Change radius
-  //   });
+      });
 
    // Update X Axis
   svg.select(".x.axis")
@@ -280,30 +273,30 @@ d3.csv("matchcomposition.csv", function(error, data) {
   // svg.selectAll(".legend").remove();
   //d3.select('#legend').selectAll('ul').remove();
 
-  // draw legend
-  var legend = svg.selectAll(".legend")
-    .data(color.domain())
-  .enter().append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d, i) { 
+  // // draw legend
+  // var legend = svg.selectAll(".legend")
+  //   .data(color.domain())
+  // .enter().append("g")
+  //   .attr("class", "legend")
+  //   .attr("transform", function(d, i) { 
 
-      return "translate(0," + i * 10 + ")"; });
+  //     return "translate(0," + i * 10 + ")"; });
 
-  // draw legend colored rectangles
-  legend.append("rect")
-      .attr("x", width + 10)
-      .attr("y", -5)
-      .attr("width", 10)
-      .attr("height", 10)
-      .style("fill", color);
+  // // draw legend colored rectangles
+  // legend.append("rect")
+  //     .attr("x", width + 10)
+  //     .attr("y", -5)
+  //     .attr("width", 10)
+  //     .attr("height", 10)
+  //     .style("fill", color);
 
-  // draw legend text
-  legend.append("text")
-      .attr("x", width )
-      .attr("y", 0)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d;});
+  // // draw legend text
+  // legend.append("text")
+  //     .attr("x", width )
+  //     .attr("y", 0)
+  //     .attr("dy", ".35em")
+  //     .style("text-anchor", "end")
+  //     .text(function(d) { return d;});
 });
 
 }
