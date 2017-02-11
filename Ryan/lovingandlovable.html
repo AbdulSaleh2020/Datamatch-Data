@@ -8,8 +8,20 @@
 
 <style>
 body {
-  font: 11px sans-serif;
+  font: 11px "Futura", sans-serif;
 }
+
+#subtitle{
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  vertical-align: center;
+  text-align: center;
+  margin: auto;
+  padding-top: 6px;
+  max-width: 490px;
+  font-weight: medium;
+}
+
 .button {
             display: inline-block;
             padding: .8em;
@@ -51,11 +63,35 @@ body {
 }
 
 #title {
-            font-family: 'Sintony', sans-serif;
+            font-family: 'Futura', sans-serif;
             font-size: 35px;
             text-align: center;
             margin-top: 4px;
+            margin-bottom: 3px;
         }
+
+#button-container{
+	vertical-align: middle;
+	text-align: center;
+	position: relative;
+}
+
+#my-wrapper {
+            position:relative; 
+            padding-top: 1%;
+
+        }
+
+#network-container{
+  position: relative;
+  margin: auto;
+  text-align: center;
+}
+
+.filter-button{
+  margin-right: 1%;
+  margin-left: 1%;
+}
 
 
 .tooltip {
@@ -67,16 +103,20 @@ body {
 </style>
 <body style="background-color: #E7E7E7;">
 <div id="title">Loving and Lovable</div>
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<div id="subtitle">ryan!!! add a little blurb about your graph here!!!</div>
+<div id="my-wrapper">
+<div id="network-container"></div>
+<div id="button-container">
 <input class="filter-button button hvr-fade" type="button" onClick = update("house") id="HouseCheck" value="House">
 <input class="filter-button button hvr-fade" type="button" onClick = update("gender") id="GenderCheck" value="Gender">
 <input class="filter-button button hvr-fade" type="button" onClick = update("year") id="YearCheck" value="Year">
-
+</div>
+</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 800 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 450 - margin.top - margin.bottom;
 
 /* 
  * value accessor - returns the value to encode for a given data object.
@@ -103,7 +143,7 @@ var cValue = function(d) { return d["Color"];},
     color = d3.scale.category20();
 
 // add the graph canvas to the body of the webpage
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#network-container").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -258,19 +298,19 @@ var property = document.getElementById('YearCheck');
         d3.selectAll("#myText").remove()
         d3.select(this).attr("r", 12).style("fill", "red");
         d3.select("svg").append("text")
-          .style("font-size", "22px")
+          .style("font-size", "18px")
           .attr("x", 80)
           .attr("y", 40)
           .attr("id", "myText")
           .text(d["Description"]);
         d3.select("svg").append("text")
-          .style("font-size", "22px")
+          .style("font-size", "18px")
           .attr("x", 80)
           .attr("y", 62)
           .attr("id", "myText")
           .text("Loving: " + xValue(d));
         d3.select("svg").append("text")
-          .style("font-size", "22px")
+          .style("font-size", "18px")
           .attr("x", 80)
           .attr("y", 84)
           .attr("id", "myText")
