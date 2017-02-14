@@ -170,7 +170,7 @@ svg.append("g")
     .style("text-anchor", "end")
     .text("Lovable");
 
-update();
+update("nothing");
 
 //Define click variables
 var genderclicked = 1;
@@ -179,13 +179,6 @@ var houseclicked = 1;
 
 function update(thing){
 
-  var property = document.getElementById('GenderCheck');
-    if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
-  var property = document.getElementById('HouseCheck');
-    if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
-  var property = document.getElementById('YearCheck');
-    if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
-
   // load data
   if (thing == "gender") {
     genderclicked = (genderclicked + 1) %2 
@@ -193,57 +186,56 @@ function update(thing){
   else if (thing == "year") {
     yearclicked = (yearclicked+1) %2
   }
-  else {
+  else if (thing == "house"){
     houseclicked = (houseclicked+1) %2
   }
+  else {
+    ;
+  }
 
-  data = {Quincy:{Sophomore:{Male:{likes_given:0,likes_recieved:0}, Female:{likes_given:0,likes_recieved:0}}, Junior: {Male:{likes_given:0,likes_recieved:0},Female:{likes_given:0,likes_recieved:0}}, Senior:{Male: {likes_given:0,likes_recieved:0},Female:{likes_given:0,likes_recieved:0}}}}
-
-  newData = [];
-
-  var property = document.getElementById('GenderCheck');
-      if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
+   var property = document.getElementById('GenderCheck');
+    if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
   var property = document.getElementById('HouseCheck');
-      if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
+    if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
   var property = document.getElementById('YearCheck');
-      if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
+    if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
+  uncleandata = {Quincy:{Sophomore:{Male:{likes_given:1,likes_received:1}, Female:{likes_given:2,likes_received:2}}, Junior: {Male:{likes_given:3,likes_received:3},Female:{likes_given:4,likes_received:4}}, Senior:{Male: {likes_given:5,likes_received:5},Female:{likes_given:6,likes_received:6}}}}
+
+  var newData = [];
   var sorted = {};
-  for (var i = 0; i < data.length; i++) {
+
+  for (var house in uncleandata){ 
     var description = "";
     var colortype = "";
-    if (genderclicked == 1){
-      colortype = data[i]["Gender"];
-    }
-    if (yearclicked == 1){
-      colortype = data[i]["Year"];
-    }
     if (houseclicked == 1){
-      colortype = data[i]["House"];
+      description = description + house + " ";
+      colortype = house
     }
-
-    if (houseclicked == 1){
-      description = description + data[i]["House"] + " ";
+    for (var year in uncleandata[house]){
+      if (yearclicked == 1){
+        var subdescription = description + year + " ";
+        if (colortype == "") {colortype = year}
+      }
+      for (var gender in uncleandata[house][year]){
+        if (genderclicked == 1){
+          var subsubdescription = subdescription + gender + " ";
+          if (colortype == "") {colortype = gender}
+        }
+        if (subsubdescription in sorted){
+          sorted[subsubdescription]["Likes Given"] += parseInt(uncleandata[house][year][gender].likes_given);
+          sorted[subsubdescription]["Likes Received"] += parseInt(uncleandata[house][year][gender].likes_received);
+        } 
+        else {
+          var temp = {};
+          temp["Likes Given"] = parseInt(uncleandata[house][year][gender].likes_given); 
+          temp["Likes Received"] = parseInt(uncleandata[house][year][gender].likes_received); 
+          temp["Color"] = colortype;
+          sorted[subsubdescription] = temp;
+        }
+      }
     }
-    if (yearclicked == 1){
-      description = description + data[i]["Year"] + " ";
-    }
-    if (genderclicked == 1){
-      description = description + data[i]["Gender"] + " ";
-    }  
-
-    if (description in sorted){
-      sorted[description]["Likes Given"] += parseInt(data[i]["Likes Given"]);
-      sorted[description]["Likes Received"] += parseInt(data[i]["Likes Received"]);
-    } 
-    else {
-      var temp = {};
-      temp["Likes Given"] = parseInt(data[i]["Likes Given"]); 
-      temp["Likes Received"] = parseInt(data[i]["Likes Received"]); 
-      temp["Color"] = colortype;
-      sorted[description] = temp;
-    }
-  }
+  };
   
   for (var key in sorted){
     var temp = {"Description" : key};
@@ -251,6 +243,8 @@ function update(thing){
       extend(temp, sorted[key])
     );
   }
+
+  console.log(newData);
 
   function extend(obj, src) {
     Object.keys(src).forEach(function(key) { obj[key] = src[key]; });
@@ -260,8 +254,8 @@ function update(thing){
   svg.selectAll(".dot").remove();
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-1, d3.max(newData, xValue)+1]);
-  yScale.domain([d3.min(data, yValue)-1, d3.max(newData, yValue)+1]);
+  xScale.domain([d3.min(uncleandata, xValue)-1, d3.max(newData, xValue)+1]);
+  yScale.domain([d3.min(uncleandata, yValue)-1, d3.max(newData, yValue)+1]);
 
   // draw dots
   svg.selectAll(".dot")
