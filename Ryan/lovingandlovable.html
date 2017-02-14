@@ -118,14 +118,6 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 800 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
-/* 
- * value accessor - returns the value to encode for a given data object.
- * scale - maps value to a visual display encoding, such as a pixel position.
- * map function - maps from data value to display value
- * axis - sets up axis
- */ 
-
-
 // setup x 
 var xValue = function(d) { return d["Likes Given"];}, // data -> value
     xScale = d3.scale.linear().range([0, width]), // value -> display
@@ -180,75 +172,62 @@ svg.append("g")
 
 update();
 
-//d3.select("#HouseCheck").on("click",update);
-//d3.select("#GenderCheck").on("click",update);
-//d3.select("#YearCheck").on("click",update);
-
 //Define click variables
 var genderclicked = 1;
 var yearclicked = 1;
 var houseclicked = 1;
 
 function update(thing){
-// load data
-if (thing == "gender") {
-  genderclicked = (genderclicked + 1) %2 
-}
-else if (thing == "year") {
-  yearclicked = (yearclicked+1) %2
-}
-else {
-  houseclicked = (houseclicked+1) %2
-}
 
+  var property = document.getElementById('GenderCheck');
+    if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
+  var property = document.getElementById('HouseCheck');
+    if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
+  var property = document.getElementById('YearCheck');
+    if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
-d3.csv("matchcomposition.csv", function(error, data) {
-  //newData = data.filter(function(d,i){return d % 2 == 0;});
-  //newData = data;
+  // load data
+  if (thing == "gender") {
+    genderclicked = (genderclicked + 1) %2 
+  }
+  else if (thing == "year") {
+    yearclicked = (yearclicked+1) %2
+  }
+  else {
+    houseclicked = (houseclicked+1) %2
+  }
+
+  data = {Quincy:{Sophomore:{Male:{likes_given:0,likes_recieved:0}, Female:{likes_given:0,likes_recieved:0}}, Junior: {Male:{likes_given:0,likes_recieved:0},Female:{likes_given:0,likes_recieved:0}}, Senior:{Male: {likes_given:0,likes_recieved:0},Female:{likes_given:0,likes_recieved:0}}}}
+
   newData = [];
 
-  // change string (from CSV) into number format
-  data.forEach(function(d) {
-    if (d.Delimiter == d["House"]){
-      d["Participation"] = +d["Participation"];
-      d["Likes Given"] = +d["Likes Given"];
-      d["Likes Received"] = +d["Likes Received"];
-    }
-  });
-
-var property = document.getElementById('GenderCheck');
-    if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
-var property = document.getElementById('HouseCheck');
-    if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
-var property = document.getElementById('YearCheck');
-    if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
+  var property = document.getElementById('GenderCheck');
+      if(genderclicked==1){property.style.backgroundColor = "#9B1B00"} else if(genderclicked==0){property.style.backgroundColor = "#B7B7B7"};
+  var property = document.getElementById('HouseCheck');
+      if(houseclicked==1){property.style.backgroundColor = "#9B1B00"} else if(houseclicked==0){property.style.backgroundColor = "#B7B7B7"};
+  var property = document.getElementById('YearCheck');
+      if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
   var sorted = {};
   for (var i = 0; i < data.length; i++) {
     var description = "";
     var colortype = "";
-    //if(d3.select("#GenderCheck").classed("selected", true)){
     if (genderclicked == 1){
       colortype = data[i]["Gender"];
     }
-    //if(d3.select("#YearCheck").classed("selected", true)){
     if (yearclicked == 1){
       colortype = data[i]["Year"];
     }
-    //if(d3.select("#HouseCheck").classed("selected", true)){
     if (houseclicked == 1){
       colortype = data[i]["House"];
     }
 
-    //if(d3.select("#HouseCheck").classed("selected", true)){
     if (houseclicked == 1){
       description = description + data[i]["House"] + " ";
     }
-    //if(d3.select("#YearCheck").classed("selected", true)){
     if (yearclicked == 1){
       description = description + data[i]["Year"] + " ";
     }
-    //if(d3.select("#GenderCheck").classed("selected", true)){
     if (genderclicked == 1){
       description = description + data[i]["Gender"] + " ";
     }  
@@ -278,7 +257,6 @@ var property = document.getElementById('YearCheck');
     return obj;
   }
 
-  //svg.selectAll("*").remove();
   svg.selectAll(".dot").remove();
 
   // don't want dots overlapping axis, so add in buffer to data domain
@@ -318,8 +296,6 @@ var property = document.getElementById('YearCheck');
       })
       .on("mouseout", function(d) {
         d3.select(this).attr("r", 5).style("fill", function(d) { return color(cValue(d));}) 
-        //d3.selectAll("#myText").remove()    
-
       });
 
    // Update X Axis
@@ -333,35 +309,6 @@ var property = document.getElementById('YearCheck');
       .transition()
       .duration(500)
       .call(yAxis);
-
-  // svg.selectAll(".legend").remove();
-  //d3.select('#legend').selectAll('ul').remove();
-
-  // // draw legend
-  // var legend = svg.selectAll(".legend")
-  //   .data(color.domain())
-  // .enter().append("g")
-  //   .attr("class", "legend")
-  //   .attr("transform", function(d, i) { 
-
-  //     return "translate(0," + i * 10 + ")"; });
-
-  // // draw legend colored rectangles
-  // legend.append("rect")
-  //     .attr("x", width + 10)
-  //     .attr("y", -5)
-  //     .attr("width", 10)
-  //     .attr("height", 10)
-  //     .style("fill", color);
-
-  // // draw legend text
-  // legend.append("text")
-  //     .attr("x", width )
-  //     .attr("y", 0)
-  //     .attr("dy", ".35em")
-  //     .style("text-anchor", "end")
-  //     .text(function(d) { return d;});
-});
 
 }
 
