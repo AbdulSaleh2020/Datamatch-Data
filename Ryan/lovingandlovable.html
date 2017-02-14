@@ -201,44 +201,46 @@ function update(thing){
   var property = document.getElementById('YearCheck');
     if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
-  uncleandata = []
-  upperhouselist = ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot"]
+  uncleandata = [];
+  upperhouselist = ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot"];
 
-  lowerhouselist = ["Holworthy", "Thayer", "Canaday", "Apley", "Mass Hall", "Lionel", "Greenough", "Grays", "Hurlbut", "Matthews", "Mower", "Pennypacker", "Straus", "Wigglesworth", "Weld", "Hollis", "Stoughton"]
+  lowerhouselist = ["Holworthy", "Thayer", "Canaday", "Apley", "Mass Hall", "Lionel", "Greenough", "Grays", "Hurlbut", "Matthews", "Mower", "Pennypacker", "Straus", "Wigglesworth", "Weld", "Hollis", "Stoughton"];
 
   //Load Data
   for (i = 0; i < upperhouselist.length; i++){
-   uncleandata[upperhouselist[i]] = {Sophomore:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}, Junior: {Male:{likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}, Senior:{Male: {likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}}
+   uncleandata[upperhouselist[i]] = {Sophomore:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}, Junior: {Male:{likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}, Senior:{Male: {likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}};
   }
 
   for (i = 0; i < lowerhouselist.length; i++){
-   uncleandata[lowerhouselist[i]] = {Freshman:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}}
+   uncleandata[lowerhouselist[i]] = {Freshman:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}};
   }
 
-  liked_array = []
+  liked_array = [];
   for (i = 0; i < 5000 ; i++){
-   liked_array[i] = 0
+   liked_array[i] = 0;
   }
 
   d3.json("address.json", function(d) {
-   people_array = d.people
-   participants = people_array.length
+   people_array = d.people;
+   participants = people_array.length;
    people_array
    .forEach(function(d) {
-     accepted = d.accepted
-     uncleandata[d.dorm][d.class_year][d.gender]["likes_given"] += accepted.length
+     accepted = d.accepted;
+     uncleandata[d.dorm][d.class_year][d.gender]["likes_given"] += accepted.length;
      for (i = 0; i < accepted.length; i++){
-       liked_array[accepted[i]] += 1
+       liked_array[accepted[i]] += 1;
      }
-   })
+   });
    people_array
    .forEach(function(d){
-     uncleandata[d.dorm][d.class_year][d.gender]["likes_received"] += liked_array[d.id]
-   })
-  })
+     uncleandata[d.dorm][d.class_year][d.gender]["likes_received"] += liked_array[d.id];
+   });
+    update2();
+  });
+  
+}
 
-  console.log(uncleandata);
-
+function update2 (){
   var newData = [];
   var sorted = {};
 
@@ -262,11 +264,15 @@ function update(thing){
         if (subsubdescription in sorted){
           sorted[subsubdescription]["Likes Given"] += parseInt(uncleandata[house][year][gender].likes_given);
           sorted[subsubdescription]["Likes Received"] += parseInt(uncleandata[house][year][gender].likes_received);
+          // sorted[subsubdescription]["Likes Given"] += 1;
+          // sorted[subsubdescription]["Likes Received"] += 1;
         } 
         else {
           var temp = {};
           temp["Likes Given"] = parseInt(uncleandata[house][year][gender].likes_given); 
           temp["Likes Received"] = parseInt(uncleandata[house][year][gender].likes_received); 
+          // temp["Likes Given"] = 0; 
+          // temp["Likes Received"] = 0; 
           temp["Color"] = colortype;
           sorted[subsubdescription] = temp;
         }
@@ -280,8 +286,6 @@ function update(thing){
       extend(temp, sorted[key])
     );
   }
-
-  console.log(newData);
 
   function extend(obj, src) {
     Object.keys(src).forEach(function(key) { obj[key] = src[key]; });
@@ -340,7 +344,6 @@ function update(thing){
       .transition()
       .duration(500)
       .call(yAxis);
-
 }
 
 </script>
