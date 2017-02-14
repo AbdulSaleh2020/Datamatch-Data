@@ -170,12 +170,13 @@ svg.append("g")
     .style("text-anchor", "end")
     .text("Lovable");
 
-update("nothing");
 
 //Define click variables
 var genderclicked = 1;
 var yearclicked = 1;
 var houseclicked = 1;
+
+update("nothing");
 
 function update(thing){
 
@@ -216,12 +217,12 @@ function update(thing){
       if (yearclicked == 1){
         var subdescription = description + year + " ";
         if (colortype == "") {colortype = year}
-      }
+      } else {var subdescription = description}
       for (var gender in uncleandata[house][year]){
         if (genderclicked == 1){
           var subsubdescription = subdescription + gender + " ";
           if (colortype == "") {colortype = gender}
-        }
+        } else {var subsubdescription = subdescription}
         if (subsubdescription in sorted){
           sorted[subsubdescription]["Likes Given"] += parseInt(uncleandata[house][year][gender].likes_given);
           sorted[subsubdescription]["Likes Received"] += parseInt(uncleandata[house][year][gender].likes_received);
@@ -254,8 +255,8 @@ function update(thing){
   svg.selectAll(".dot").remove();
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(uncleandata, xValue)-1, d3.max(newData, xValue)+1]);
-  yScale.domain([d3.min(uncleandata, yValue)-1, d3.max(newData, yValue)+1]);
+  xScale.domain([0, d3.max(newData, xValue)+1]);
+  yScale.domain([0, d3.max(newData, yValue)+1]);
 
   // draw dots
   svg.selectAll(".dot")
