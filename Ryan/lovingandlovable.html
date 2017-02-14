@@ -112,7 +112,7 @@ body {
 <input class="filter-button button hvr-fade" type="button" onClick = update("year") id="YearCheck" value="Year">
 </div>
 </div>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 800 - margin.left - margin.right,
@@ -201,7 +201,43 @@ function update(thing){
   var property = document.getElementById('YearCheck');
     if(yearclicked==1){property.style.backgroundColor = "#9B1B00"} else if(yearclicked==0){property.style.backgroundColor = "#B7B7B7"};
 
-  uncleandata = {Quincy:{Sophomore:{Male:{likes_given:1,likes_received:1}, Female:{likes_given:2,likes_received:2}}, Junior: {Male:{likes_given:3,likes_received:3},Female:{likes_given:4,likes_received:4}}, Senior:{Male: {likes_given:5,likes_received:5},Female:{likes_given:6,likes_received:6}}}}
+  uncleandata = []
+  upperhouselist = ["Leverett", "Kirkland", "Cabot", "Lowell", "Adams", "Dunster", "Mather", "Winthrop", "Pforzheimer", "Currier", "Quincy", "Eliot"]
+
+  lowerhouselist = ["Holworthy", "Thayer", "Canaday", "Apley", "Mass Hall", "Lionel", "Greenough", "Grays", "Hurlbut", "Matthews", "Mower", "Pennypacker", "Straus", "Wigglesworth", "Weld", "Hollis", "Stoughton"]
+
+  //Load Data
+  for (i = 0; i < upperhouselist.length; i++){
+   uncleandata[upperhouselist[i]] = {Sophomore:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}, Junior: {Male:{likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}, Senior:{Male: {likes_given:0,likes_received:0},Female:{likes_given:0,likes_received:0}}}
+  }
+
+  for (i = 0; i < lowerhouselist.length; i++){
+   uncleandata[lowerhouselist[i]] = {Freshman:{Male:{likes_given:0,likes_received:0}, Female:{likes_given:0,likes_received:0}}}
+  }
+
+  liked_array = []
+  for (i = 0; i < 5000 ; i++){
+   liked_array[i] = 0
+  }
+
+  d3.json("address.json", function(d) {
+   people_array = d.people
+   participants = people_array.length
+   people_array
+   .forEach(function(d) {
+     accepted = d.accepted
+     uncleandata[d.dorm][d.class_year][d.gender]["likes_given"] += accepted.length
+     for (i = 0; i < accepted.length; i++){
+       liked_array[accepted[i]] += 1
+     }
+   })
+   people_array
+   .forEach(function(d){
+     uncleandata[d.dorm][d.class_year][d.gender]["likes_received"] += liked_array[d.id]
+   })
+  })
+
+  console.log(uncleandata);
 
   var newData = [];
   var sorted = {};
