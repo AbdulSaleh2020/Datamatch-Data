@@ -1,9 +1,20 @@
 # Datamatch-Data
 All materials related to data visualization and stats analysis for the Harvard Computer Society (HCS) Datamatch Project.
 
-Data Format
-ID_NUMBER:Year:House:Gender:GenderInterestedIn:ID_FIRST_MATCH,ELIGIBLE_FOR_DATE?,ACCEPTED_DATE?,OTHER_PERSON_ACCEPT_TOO?:(NEXT MATCH SAME INFO): (etc)
+Raw Data:
+anon_answer_data_2016.csv #Answer data from last year
+data.txt #Match Data from last year.
+data.tsv #So far fictional data on response times.
+Questions.txt #Last year's questions
 
-Git Info Goes Here:
-- GIT STEPS COMING SOON TO A GITHUB NEAR YOU
-	-p.s Ife is try to make sure he has the right steps for ya'll
+Processed Data:
+matchmatrix.csv #Matches by house/dorm
+matchmatrixold.csv #Matches by house/dorm, but considers all freshmen the same.
+questionanswers.csv #Obvious when you open it
+matchcomposition.csv #Sees basic user stats by house/gender/year
+
+Scripts:
+houses.html #Pi Chart thing.  Sara is working on improving this.  I've copied over some of her edits to this.
+linegraph.html #Uses data.tsv to plot responses vs. time
+reader.py #Creates matchmatrix.csv and matchcomposition.csv by reading data.txt
+answerReader.py #Creates questionanswers.csv
