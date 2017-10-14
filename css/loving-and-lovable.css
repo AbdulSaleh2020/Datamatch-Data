@@ -1,0 +1,58 @@
+#subtitle{
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  vertical-align: center;
+  text-align: center;
+  margin: auto;
+  padding-top: 6px;
+  max-width: 490px;
+  font-weight: medium;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+#title {
+  font-family: 'Futura', sans-serif;
+  font-size: 35px;
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 3px;
+}
+
+#button-container{
+	vertical-align: middle;
+	text-align: center;
+	position: relative;
+}
+
+#my-wrapper {
+  position:relative; 
+  padding-top: 1%;
+}
+
+#network-container{
+  position: relative;
+  margin: auto;
+  text-align: center;
+}
+
+.filter-button{
+  margin-right: 1%;
+  margin-left: 1%;
+}
+
+.tooltip {
+  position: absolute;
+  width: 220px;
+  height: 28px;
+  pointer-events: none;
+}

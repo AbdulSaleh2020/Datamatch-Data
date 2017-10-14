@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title Datamatch Question Responses
+    link(rel='stylesheet', href='../css/tipped.css')
+    link(rel='stylesheet', href='../css/universal.css')
+    link(rel='stylesheet', href='../css/barchart.css')
+  body
+    div.bigdiv
+      h1 2016 Survey Results
+      center
+        h2#description
+          | Check out questions from last year to see how people answered them.  You can examine different demographics of the Harvard population by selecting various gender and year combinations in the bottom-right box.  Freshmen males and freshmen females are initially selected.
+      div#bar_holder
+        center
+          div#button_holder
+            each num in [1, 2, 3]
+              input.filter-button.button.hvr-fade.page(type='button', id='page' + num, onclick='sheet_shift(' + num + ')', value="Page " + num)
+      div#right_side
+        div#question-div
+          p Click on a question to see analytics! 
+        div#pie_chart
+          h2 Filter Responses By Year &amp Gender
+          div#chartdiv
+          center
+            div#buttons1
+              each year in ['Freshman', 'Sophomore', 'Junior', 'Senior']
+                input.filter-button.button.hvr-fade(type='button', id='button' + 
+                year, onclick="change('" + year + "')", value=year) 
+            div#buttons2
+              each gender in ['Male', 'Female']
+                input.filter-button.button.hvr-fade(type='button', id='button' + gender, onclick="change('" + gender + "')", value=gender)
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script(src='https://d3js.org/d3.v4.min.js')
+    script(src='../js/tipped.js')
+    script(src='../js/barchart.js')

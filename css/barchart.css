@@ -1,0 +1,77 @@
+.axis path,
+
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bigdiv h1{
+  font-size: 44px;
+  text-align: center;
+  margin-left: auto; 
+  margin-right: auto; 
+  width: 1400px;
+}
+
+.bigdiv h2{
+  width: 870px;
+  vertical-align: center;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis--x path {
+  display: none;
+}
+
+#pie_chart {
+  padding: 1% 2% 0 2%;
+  float: left; 
+  width: 30%; 
+  height: 420px; 
+  border-right: dotted;
+  border-bottom: dotted; 
+  border-color: #e6186d;
+}
+
+#bar_holder {
+  margin-left: 2%; 
+  padding: 0 15px 0 15px; 
+  border: dotted; 
+  border-color: #e6186d; 
+  float:left; 
+  margin-bottom: 50px;
+}
+
+#button_holder {
+  margin-top: 3%; 
+  margin-bottom: 3%;
+}
+
+#question-div {
+  padding: 0 2% 0 2%;
+  border-top: dotted;
+  border-right: dotted;
+  border-bottom: dotted;
+  border-color: #e6186d;
+  margin-left: 0;
+  float: left;
+  width: 30%;
+  height: 330px;
+}
+
+#question-div p {
+  font-size: 15px;
+}
+
+#question-div span {
+  font-size: 30px;
+}
+
+#page_description {
+  padding-bottom: 15px;
+}
+

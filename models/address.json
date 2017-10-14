@@ -1,0 +1,1 @@
+{"people" : [{"id": 1, "gender": "Male", "dorm": "Quincy", "class_year":"Junior", "matched": [2,3], "accepted": [2]}, {"id": 2, "gender": "Female", "dorm": "Hurlbut", "class_year":"Freshman", "matched": [1,2,3], "accepted": []},{"id": 3, "gender": "Female", "dorm": "Quincy", "class_year":"Senior", "matched": [1,2,3], "accepted": [1]}]}

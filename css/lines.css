@@ -1,0 +1,29 @@
+button, input[type^=button] {
+  font-family: Futura, Trebuchet MS, sans-serif;
+  border: none;
+  border-radius: 5px;
+}
+
+#my-wrapper {
+  position:relative; 
+  padding-top: 15px;
+}
+
+#title {
+  font-family: Futura, Trebuchet MS, sans-serif;
+  font-size: 36px;
+  text-align: center;
+  margin-top: 0px;
+}
+
+#subtitle{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  vertical-align: center;
+  text-align: center;
+  margin: auto;
+  padding-top: .6%;
+  max-width: 490px;
+  font-weight: medium;
+  padding-bottom: 1%;
+}
