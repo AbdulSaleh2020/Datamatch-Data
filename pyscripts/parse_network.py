@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #Monday, January 2 2017
+# Code for parsing raw data (raw_responses_2016.csv) to gexf file
 
 import json
 import random

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+  crossorigin="anonymous"></script>
+
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Sintony:700" rel="stylesheet">
+        <link href= "css/universal.css" rel="stylesheet">
+        <link href= "css/network.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="title">Match Networks</div>
+        <div id="subtitle">Want to see how random people matched from last year's Datamatch? Click below. View networks by gender, house, and class year.</div>
+          <div id="my-wrapper">
+          <div id="network-container">
+          <div class="button-container">
+          <input onClick= "assign_random();changeclick(4);" class="button hvr-fade" type="button" name="dataset" value="Generate Random Network"><br>
+          </div>
+          </div>
+          <div class="button-container">
+           <span id="heading">See Matches By:</span>
+              <input onClick="changeclick(1);" id="gender" class="filter-button button hvr-fade" type="button" name="dataset" value="Gender">
+              <input onClick="changeclick(2);" id="house" class="filter-button button hvr-fade" type="button" name="dataset" value="House">
+              <input onClick="changeclick(3);" id="year" class="filter-button button hvr-fade" type="button" name="dataset" value="Class Year">
+
+          </div>
+          </div>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="constants/colors.js"></script>
+        <script src="js/network.js"></script>
+
+    </body>
+</html>

@@ -14,19 +14,19 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
 // setup x 
 var xValue = function(d) { return d["Likes Given"];}, // data -> value
-    xScale = d3.scale.linear().range([0, width]), // value -> display
+    xScale = d3.scaleLinear().range([0, width]), // value -> display
     xMap = function(d) { return xScale(xValue(d));}, // data -> display
-    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    xAxis = d3.axisBottom().scale(xScale);
 
 // setup y
 var yValue = function(d) { return d["Likes Received"];}, // data -> value
-    yScale = d3.scale.linear().range([height, 0]), // value -> display
+    yScale = d3.scaleLinear().range([height, 0]), // value -> display
     yMap = function(d) { return yScale(yValue(d));}, // data -> display
-    yAxis = d3.svg.axis().scale(yScale).orient("left");
+    yAxis = d3.axisLeft().scale(yScale);
 
 // setup fill color
 var cValue = function(d) { return d["Color"];},
-    color = d3.scale.category20();
+    color = d3.scaleOrdinal(d3.schemeCategory20);
 
 // add the graph canvas to the body of the webpage
 var svg = d3.select("#network-container").append("svg")
