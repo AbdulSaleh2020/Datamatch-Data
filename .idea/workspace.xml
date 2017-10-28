@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="482ba600-7813-423c-bb20-ef498fd079ed" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/constants/colors.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/Colored.pdf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/DatamatchVis.gephi" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/Labled_graph.pdf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/Screen Shot 2017-01-09 at 9.45.02 PM.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/data.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/datahead.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/gephiInput.gexf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/network.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/parse.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/parseGephi.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Sam/test.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/barchart.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/barchart.pug" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/anon_answer_data_2016.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/anon_answers_2017.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/barchartData2016.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/barchartData2017.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/jsondatabyID.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/matchcomposition.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/data/matchmatrix.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/houses.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/lines.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/lines.pug" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/lovingandlovable.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/htmls/network.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/network.css" afterPath="$PROJECT_DIR$/css/network.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/loving-and-lovable.js" afterPath="$PROJECT_DIR$/js/loving-and-lovable.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/network.js" afterPath="$PROJECT_DIR$/js/network.js" />
-    </list>
+    <list default="true" id="482ba600-7813-423c-bb20-ef498fd079ed" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -92,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/lovingandlovable.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+              <caret line="5" column="14" lean-forward="false" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -102,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/js/loving-and-lovable.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-3174">
-              <caret line="30" column="50" lean-forward="true" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
+              <caret line="30" column="50" lean-forward="false" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -114,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/houses.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="570">
-              <caret line="38" column="4" lean-forward="true" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="57" />
+              <caret line="38" column="4" lean-forward="false" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -124,7 +92,7 @@
         <entry file="file://$PROJECT_DIR$/barchart.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="2202" lean-forward="true" selection-start-line="0" selection-start-column="2202" selection-end-line="0" selection-end-column="2202" />
+              <caret line="0" column="2202" lean-forward="false" selection-start-line="0" selection-start-column="2202" selection-end-line="0" selection-end-column="2202" />
               <folding />
             </state>
           </provider>
@@ -275,12 +243,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1508820113237</updated>
-      <workItem from="1508820116419" duration="3653000" />
+      <workItem from="1508820116419" duration="3883000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3653000" />
+    <option name="totallyTimeSpent" value="3883000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -376,7 +344,7 @@
     <entry file="file://$PROJECT_DIR$/lovingandlovable.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+          <caret line="5" column="14" lean-forward="false" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -384,7 +352,7 @@
     <entry file="file://$PROJECT_DIR$/js/loving-and-lovable.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3174">
-          <caret line="30" column="50" lean-forward="true" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
+          <caret line="30" column="50" lean-forward="false" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -394,7 +362,7 @@
     <entry file="file://$PROJECT_DIR$/barchart.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="2202" lean-forward="true" selection-start-line="0" selection-start-column="2202" selection-end-line="0" selection-end-column="2202" />
+          <caret line="0" column="2202" lean-forward="false" selection-start-line="0" selection-start-column="2202" selection-end-line="0" selection-end-column="2202" />
           <folding />
         </state>
       </provider>
@@ -402,7 +370,7 @@
     <entry file="file://$PROJECT_DIR$/houses.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
-          <caret line="38" column="4" lean-forward="true" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="57" />
+          <caret line="38" column="4" lean-forward="false" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="57" />
           <folding />
         </state>
       </provider>
