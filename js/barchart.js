@@ -214,7 +214,7 @@ function populateFilters(choice){
   function helper(choice){
     return buttonClickedStatus[choice] && (invert(filterBys)[choice]==filterBy);
   }
-  for (idx in Object.keys(filterBys)){
+  for(idx in Object.keys(filterBys)){
     var filterBy = Object.keys(filterBys)[idx];  // either gender or year
     filters[filterBy] = filterBys[filterBy].filter(helper);
   };
@@ -359,21 +359,19 @@ function makeLegends(){
 
 function changeBars(data){
   // Adjust axes
-  console.log(data);
   x.domain([0, d3.max(data, function(d) {return d.boxes["4"].x1;})]);
   y.domain(data.map(function(d) { return d.Question; }));
-  console.log(y);
   d3.select('.y-axis')
-    .call(yAxis)
+    .call(yAxis);
   setButtonsBackgroundColor(); // Adjust buttons
   // Adjust data
   barSVG.selectAll(".bar").selectAll(".subbar")
-        .data(function(d, i){ return data[i].boxes})
+        .data(function(d, i){ return data[i].boxes});
 
   d3.selectAll(".subrect").transition()
     .attr("x", function(d, i) { return x(this.parentNode.__data__.x0);})
     .attr("width", function(d, i) { return x(this.parentNode.__data__.x1) - 
-                                           x(this.parentNode.__data__.x0); })
+                                           x(this.parentNode.__data__.x0); });
 
   d3.selectAll(".subbar text").transition()
     .attr("x", function(d) { return (x(this.parentNode.__data__.x0) +
@@ -454,7 +452,7 @@ function setupBars(data){
     .attr("x", "1")
     .attr("width", width)
     .attr("fill-opacity", "0.5")
-    .style("fill", "#F5F5F5")
+    .style("fill", "#F5F5F5");
 
   barSVG.append("g")
     .attr("class", "y axis")
@@ -471,7 +469,7 @@ function setupBars(data){
     skin: 'light',
     offset: {x: 50}
   });
-};  
+}
 // Ends sheet shift
     
 // Function takes data (from a csv) and adds boxes attribute so we know sizing.
@@ -490,7 +488,7 @@ function addCustomAttributes(data){
             });
   }); 
   return data;
-};
+}
 
 function sheet_shift(n){
   changeBars(selectDataSubset(n));
@@ -507,9 +505,5 @@ d3.csv(barData, function(error, data) {
     allData = data;
     setupBars(selectDataSubset(1));
   });
-})
-
-
-
-
+});
 
