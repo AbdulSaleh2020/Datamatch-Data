@@ -1,6 +1,11 @@
 
 // The colors.  No reason for these to change between visualizations.
-var lookupColor = {
+
+function lookupColor (d){
+  return lookupColorDict[d];
+}
+
+var lookupColorDict = {
   // Genders
   'Female': '#FF3368',
   'Male': '#0021B1',
@@ -39,8 +44,8 @@ var lookupColor = {
   'Apley': '#a3e4ff',
 
   // Year
-  'Freshman': '#a3e4ff',
-  'Sophomore': '#a3e4ff',
-  'Junior': '#a3e4ff',
-  'Senior': '#a3e4ff'
+  'Freshman': '#e9e121',
+  'Sophomore': '#5fff30',
+  'Junior': '#1c4cff',
+  'Senior': '#ff1c2b'
 };
